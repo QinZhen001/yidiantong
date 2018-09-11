@@ -1,0 +1,2 @@
+export const SET_CUR_NAV_INDEX = 'SET_CUR_NAV_INDEX'
+

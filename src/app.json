@@ -1,0 +1,34 @@
+{
+  "pages": [
+    "pages/home/main",
+    "pages/me/main",
+    "pages/express/main",
+    "pages/protocol/main",
+    "pages/dress/main",
+    "pages/water/main"
+  ],
+  "window": {
+    "navigationBarTitleText": "邑点通",
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f3f3f3"
+  },
+  "tabBar": {
+    "selectedColor": "#EA5149",
+    "list": [
+      {
+        "pagePath": "pages/home/main",
+        "text": "首页",
+        "iconPath": "/static/img/footer/home.png",
+        "selectedIconPath": "/static/img/footer/home_s.png"
+      },
+      {
+        "pagePath": "pages/me/main",
+        "text": "我的",
+        "iconPath": "/static/img/footer/me.png",
+        "selectedIconPath": "static/img/footer/me_s.png"
+      }
+    ]
+  }
+}
