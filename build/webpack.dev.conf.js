@@ -11,6 +11,8 @@ var path = require('path')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var CopyWebpackPlugin = require('copy-webpack-plugin')
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin');
+
 
 // add hot-reload related code to entry chunks
 // Object.keys(baseWebpackConfig.entry).forEach(function (name) {
@@ -57,10 +59,10 @@ module.exports = merge(baseWebpackConfig, {
       minChunks: function (module, count) {
         // any required modules inside node_modules are extracted to vendor
         return (
-          module.resource &&
-          /\.js$/.test(module.resource) &&
-          module.resource.indexOf('node_modules') >= 0
-        ) || count > 1
+            module.resource &&
+            /\.js$/.test(module.resource) &&
+            module.resource.indexOf('node_modules') >= 0
+          ) || count > 1
       }
     }),
     new webpack.optimize.CommonsChunkPlugin({
@@ -77,6 +79,10 @@ module.exports = merge(baseWebpackConfig, {
     //   template: 'index.html',
     //   inject: true
     // }),
-    new FriendlyErrorsPlugin()
+    new FriendlyErrorsPlugin(),
+    // 复制插件
+    new CopyWebpackPlugin([
+      {from: 'cloudfunctions', to: 'cloudfunctions'}
+    ])
   ]
 })

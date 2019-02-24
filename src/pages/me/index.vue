@@ -2,11 +2,11 @@
   <div class="me">
     <div class="me-header">
       <div class="header-bend-bg"></div>
-      <div class="header-content" @click="login">
+      <div class="header-content">
         <div class="avatar-wrapper">
-          <img src="/static/img/avatar.png" alt="">
+          <img :src="userInfo.avatarUrl" alt="">
         </div>
-        <p class="username">我的的名字</p>
+        <div class="username" @click="test">{{userInfo.nickName}}</div>
       </div>
     </div>
     <divider height="15px"></divider>
@@ -16,7 +16,7 @@
           <img src="/static/img/footer/me.png" alt="">
         </div>
         <div class="item-right">
-          <text class="text">我的订单</text>
+          <text class="text" @click="test">我的aaa订单</text>
         </div>
       </div>
       <div class="item">
@@ -48,23 +48,89 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import {mapMutations, mapState} from 'vuex'
   import Divider from '../../components/divider.vue'
   import {request} from '../../api/request'
+  import {showDialog} from '../../utils/index'
+  import {appName} from '../../common/constant/constant'
 
   export default{
+    mounted(){
+      if (!this.userInfo.nickName) {
+        console.log('me mounted')
+        this.getUserInfo()
+      }
+    },
     methods: {
       login(){
-        wx.login({
-          success: function (res) {
-            if (res.code) {
-              console.log(res.code)
-              //向自己服务器请求
-              const result = request('/user_login.action', 'GET', {code: res.code})
-              console.log(result)
+//        wx.login({
+//          success: function (res) {
+//            if (res.code) {
+//              console.log(res.code)
+//              //向自己服务器请求
+//              const result = request('/user_login.action', 'GET', {code: res.code})
+//              console.log(result)
+//            }
+//          }
+//        })
+      },
+      test(){
+        console.log('test')
+//        const db = wx.cloud.database()
+//        db.collection('books').where({
+//          father: 'father'
+//        }).get({
+//          success(res) {
+//            // 输出 [{ "title": "The Catcher in the Rye", ... }]
+//            console.log(res)
+//          }
+//        })
+
+//        wx.cloud.callFunction({name: 'login'}).then(res => {
+//          console.log(res)
+//        })
+        wx.getUserInfo({
+          success(res) {
+            console.log(res.userInfo)
+          }
+        })
+
+//        showDialog('获取权限', `允许${appName}获取您的信息吗？`, true, '允许!')
+      },
+      getUserInfo(){
+        let that = this
+        wx.getSetting({
+          success(res) {
+            if (res.authSetting['scope.userInfo']) {
+              // 已经授权，可以直接调用 getUserInfo 获取头像昵称
+              wx.getUserInfo({
+                success(res) {
+                  console.log(res.userInfo)
+                  that.setUserInfo({
+                    nickName: res.userInfo.nickName,
+                    avatarUrl: res.userInfo.avatarUrl
+                  })
+                }
+              })
+            } else {
+              wx.authorize({
+                scope: "scope.userInfo",
+                success: () => {
+
+                }
+              })
             }
           }
         })
-      }
+      },
+      ...mapMutations({
+        setUserInfo: 'SET_USER_INFO',
+      })
+    },
+    computed: {
+      ...mapState([
+        'userInfo'
+      ])
     },
     components: {
       Divider

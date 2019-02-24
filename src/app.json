@@ -1,4 +1,5 @@
 {
+  "cloud": true,
   "pages": [
     "pages/home/main",
     "pages/me/main",
@@ -9,10 +10,10 @@
   ],
   "window": {
     "navigationBarTitleText": "邑点通",
-    "backgroundTextStyle": "dark",
-    "navigationBarBackgroundColor": "#fff",
-    "navigationBarTextStyle": "black",
-    "backgroundColor": "#f3f3f3"
+    "backgroundColor": "#dddddd",
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#EA5149",
+    "navigationBarTextStyle": "white"
   },
   "tabBar": {
     "selectedColor": "#EA5149",

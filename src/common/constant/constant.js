@@ -1,6 +1,3 @@
-// import {getRandomNum} from '../../utils/index'
-// const cost = getRandomNum(10, 25);
-
 //首页导航相关
 export const navItems = [
   {
@@ -36,12 +33,14 @@ export const navItems = [
 export const phoneNum = "15815788990"
 
 //要显示店铺位置的经纬度
-export const shopPosition = [22.595355,113.085880]
+export const shopPosition = [22.595355, 113.085880]
 
 //卡片分享的信息
 export const shareInfo = {
   title: '全邑大最好用的小程序，赶快戳进来看看吧',
   path: 'pages/index/main'
 }
+
+export const appName = "邑大圈子"
 
 
