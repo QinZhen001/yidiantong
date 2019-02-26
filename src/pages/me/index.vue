@@ -6,7 +6,7 @@
         <div class="avatar-wrapper">
           <img :src="userInfo.avatarUrl" alt="">
         </div>
-        <div class="username" @click="test">{{userInfo.nickName}}</div>
+        <div class="username">{{userInfo.nickName}}</div>
       </div>
     </div>
     <divider height="15px"></divider>
@@ -48,17 +48,27 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {mapMutations, mapState} from 'vuex'
+  import {mapState} from 'vuex'
   import Divider from '../../components/divider.vue'
   import {request} from '../../api/request'
-  import {showDialog} from '../../utils/index'
+  import {showDialog, getUserInfo} from '../../utils/index'
   import {appName} from '../../common/constant/constant'
 
   export default{
+    data(){
+      return {
+        userList: [
+          {name: '购物车', iconUrl: ''},
+          {name: '我的订单', iconUrl: ''},
+          {name: '我的发布', iconUrl: ''},
+          {name: '我的快递', iconUrl: ''},
+          {name: '我的优惠卷', iconUrl: ''},
+        ]
+      }
+    },
     mounted(){
       if (!this.userInfo.nickName) {
-        console.log('me mounted')
-        this.getUserInfo()
+//        getUserInfo()
       }
     },
     methods: {
@@ -96,36 +106,7 @@
         })
 
 //        showDialog('获取权限', `允许${appName}获取您的信息吗？`, true, '允许!')
-      },
-      getUserInfo(){
-        let that = this
-        wx.getSetting({
-          success(res) {
-            if (res.authSetting['scope.userInfo']) {
-              // 已经授权，可以直接调用 getUserInfo 获取头像昵称
-              wx.getUserInfo({
-                success(res) {
-                  console.log(res.userInfo)
-                  that.setUserInfo({
-                    nickName: res.userInfo.nickName,
-                    avatarUrl: res.userInfo.avatarUrl
-                  })
-                }
-              })
-            } else {
-              wx.authorize({
-                scope: "scope.userInfo",
-                success: () => {
-
-                }
-              })
-            }
-          }
-        })
-      },
-      ...mapMutations({
-        setUserInfo: 'SET_USER_INFO',
-      })
+      }
     },
     computed: {
       ...mapState([
@@ -166,15 +147,18 @@
           height: 100px;
           border-radius: 50%;
           background-color: @color-bg;
+          border: 2px solid @color-divider;
           img {
             width: 100%;
             height: 100%;
+            border-radius: 50%;
           }
         }
         .username {
           text-align: center;
           color: @color-middle-black;
           font-size: @font-size-medium-x;
+          letter-spacing: 1px;
         }
       }
     }

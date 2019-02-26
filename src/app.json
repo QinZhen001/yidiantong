@@ -6,7 +6,8 @@
     "pages/express/main",
     "pages/protocol/main",
     "pages/dress/main",
-    "pages/water/main"
+    "pages/water/main",
+    "pages/info/main"
   ],
   "window": {
     "navigationBarTitleText": "邑点通",

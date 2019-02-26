@@ -14,16 +14,17 @@ export const navItems = [
     imgUrl: '/static/img/car.png'
   },
   {
-    text: "桶装水",
+    text: "订水",
     imgUrl: '/static/img/water.png',
     pageUrl: "/pages/water/main"
   },
   {
-    text: "软件下载",
-    imgUrl: '/static/img/download.png'
+    text: "信息",
+    imgUrl: '/static/img/download.png',
+    pageUrl: "/pages/info/main"
   },
   {
-    text: "正装展示",
+    text: "商城",
     imgUrl: '/static/img/show.png',
     pageUrl: "/pages/dress/main"
   },

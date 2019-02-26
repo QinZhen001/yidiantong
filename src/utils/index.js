@@ -1,3 +1,6 @@
+import store from '../store/index'
+import * as types from '../store/mutation-types'
+
 function formatNumber(n) {
   const str = n.toString()
   return str[1] ? str : `0${str}`
@@ -17,6 +20,51 @@ export function formatTime(date) {
 
   return `${t1} ${t2}`
 }
+
+
+/**
+ * 获取用户信息 并自动保存用户信息到vuex
+ */
+export function getUserInfo() {
+  wx.getSetting({
+    success(res) {
+      if (res.authSetting['scope.userInfo']) {
+        // 已经授权，可以直接调用 getUserInfo 获取头像昵称
+        wx.getUserInfo({
+          success(res) {
+            // console.log(res.userInfo)
+            setUserInfo(res.userInfo)
+          }
+        })
+      } else {
+        wx.authorize({
+          scope: "scope.userInfo",
+          success: () => {
+            wx.getUserInfo({
+              success(res) {
+                // console.log(res.userInfo)
+                setUserInfo(res.userInfo)
+              }
+            })
+          }
+        })
+      }
+    }
+  })
+}
+
+/**
+ * 保存用户信息
+ * @param nickName
+ * @param avatarUrl
+ */
+function setUserInfo({nickName, avatarUrl}) {
+  store.commit(types.SET_USER_INFO, {
+    nickName: nickName,
+    avatarUrl: avatarUrl
+  })
+}
+
 
 /**
  * 展示一个toast
@@ -99,8 +147,4 @@ export function timeValidate(val) {
 }
 
 
-//
-// export default {
-//   formatNumber,
-//   formatTime
-// }
+
