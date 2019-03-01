@@ -1,5 +1,7 @@
 import store from '../store/index'
 import * as types from '../store/mutation-types'
+import MD5 from 'js-md5'
+
 
 function formatNumber(n) {
   const str = n.toString()
@@ -72,7 +74,7 @@ function setUserInfo({nickName, avatarUrl}) {
  * @param{String} icon  图标，有效值 "success", "loading", "none"
  * @param{String} image 自定义图标的本地路径，image 的优先级高于 icon
  */
-export function showToast(title, icon = 'none', image, duration = 2000) {
+export function showToast(title, icon = 'none', image = null, duration = 2000) {
   let params = {title: title}
   if (icon) params.icon = icon
   if (image) params.image = image
@@ -94,6 +96,11 @@ export function showDialog(title, content, showCancel, confirmText) {
     showCancel,
     confirmText
   })
+}
+
+
+export function md5(str) {
+  return MD5(str)
 }
 
 

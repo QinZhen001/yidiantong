@@ -40,8 +40,10 @@
   import {request} from '../../api/request'
   import {navItems, shareInfo, phoneNum, shopPosition} from '../../common/constant/constant'
   import {showToast} from '../../utils/index'
+  import {userInfoMixin} from '../../common/mixin/mixin'
 
   export default {
+    mixins: [userInfoMixin],
     data(){
       return {
         imgUrls: [],
@@ -51,6 +53,9 @@
     },
     created(){
       this.getImgUrls()
+    },
+    mounted(){
+
     },
     methods: {
       async getImgUrls(){

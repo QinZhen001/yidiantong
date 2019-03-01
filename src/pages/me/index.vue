@@ -6,41 +6,20 @@
         <div class="avatar-wrapper">
           <img :src="userInfo.avatarUrl" alt="">
         </div>
-        <div class="username">{{userInfo.nickName}}</div>
+        <!--<div class="username">{{userInfo.nickName}}</div>-->
+        <div class="username">我的名字</div>
       </div>
     </div>
     <divider height="15px"></divider>
     <div class="me-list">
-      <div class="item">
+      <div v-for="(item,index) in userList"
+           :key="index"
+           class="item">
         <div class="item-left">
-          <img src="/static/img/footer/me.png" alt="">
+          <img :src="item.iconUrl" alt="">
         </div>
         <div class="item-right">
-          <text class="text" @click="test">我的aaa订单</text>
-        </div>
-      </div>
-      <div class="item">
-        <div class="item-left">
-          <img src="/static/img/footer/me.png" alt="">
-        </div>
-        <div class="item-right">
-          <text class="text">我的订单</text>
-        </div>
-      </div>
-      <div class="item">
-        <div class="item-left">
-          <img src="/static/img/footer/me.png" alt="">
-        </div>
-        <div class="item-right">
-          <text class="text">我的订单</text>
-        </div>
-      </div>
-      <div class="item">
-        <div class="item-left">
-          <img src="/static/img/footer/me.png" alt="">
-        </div>
-        <div class="item-right">
-          <text class="text">我的订单</text>
+          <text class="text">{{item.name}}</text>
         </div>
       </div>
     </div>
@@ -48,70 +27,37 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {mapState} from 'vuex'
   import Divider from '../../components/divider.vue'
   import {request} from '../../api/request'
   import {showDialog, getUserInfo} from '../../utils/index'
   import {appName} from '../../common/constant/constant'
+  import {userInfoMixin} from '../../common/mixin/mixin'
 
   export default{
+    mixins: [userInfoMixin],
     data(){
       return {
         userList: [
-          {name: '购物车', iconUrl: ''},
-          {name: '我的订单', iconUrl: ''},
-          {name: '我的发布', iconUrl: ''},
-          {name: '我的快递', iconUrl: ''},
-          {name: '我的优惠卷', iconUrl: ''},
+          {name: '购物车', iconUrl: '/static/img/me/shopping_car.png'},
+          {name: '我的订单', iconUrl: '/static/img/me/order.png'},
+          {name: '我的发布', iconUrl: '/static/img/me/release.png'},
+          {name: '我的快递', iconUrl: '/static/img/me/express.png'},
+          {name: '我的优惠卷', iconUrl: '/static/img/me/coupon.png'},
         ]
-      }
-    },
-    mounted(){
-      if (!this.userInfo.nickName) {
-//        getUserInfo()
       }
     },
     methods: {
       login(){
-//        wx.login({
-//          success: function (res) {
-//            if (res.code) {
-//              console.log(res.code)
-//              //向自己服务器请求
-//              const result = request('/user_login.action', 'GET', {code: res.code})
-//              console.log(result)
-//            }
-//          }
-//        })
+
       },
       test(){
         console.log('test')
-//        const db = wx.cloud.database()
-//        db.collection('books').where({
-//          father: 'father'
-//        }).get({
-//          success(res) {
-//            // 输出 [{ "title": "The Catcher in the Rye", ... }]
-//            console.log(res)
-//          }
-//        })
-
-//        wx.cloud.callFunction({name: 'login'}).then(res => {
-//          console.log(res)
-//        })
         wx.getUserInfo({
           success(res) {
             console.log(res.userInfo)
           }
         })
-
-//        showDialog('获取权限', `允许${appName}获取您的信息吗？`, true, '允许!')
       }
-    },
-    computed: {
-      ...mapState([
-        'userInfo'
-      ])
     },
     components: {
       Divider

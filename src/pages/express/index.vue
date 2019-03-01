@@ -40,7 +40,7 @@
                     ref="deliverNameInput"
                     :value="deliveryForm.name"
                     :validate="nameValidate"
-                    @changText="getdeliveryFormResult('name',$event)">
+                    @changText="getDeliveryFormResult('name',$event)">
         </input-item>
         <input-item beforeText="宿 舍"
                     placeholder="请输入宿舍号 格式如:47-206"
@@ -48,7 +48,7 @@
                     ref="deliverDormInput"
                     :value="deliveryForm.dorm"
                     :validate="dormNumValidate"
-                    @changText="getdeliveryFormResult('dorm',$event)">
+                    @changText="getDeliveryFormResult('dorm',$event)">
         </input-item>
         <input-item beforeText="手 机"
                     placeholder="请输入正确的手机号"
@@ -56,7 +56,7 @@
                     ref="deliverPhoneInput"
                     :value="deliveryForm.phone"
                     :validate="phoneValidate"
-                    @changText="getdeliveryFormResult('phone',$event)">
+                    @changText="getDeliveryFormResult('phone',$event)">
         </input-item>
         <picker mode="date" @change="changeDate">
           <input-item beforeText="日 期"
@@ -74,7 +74,7 @@
                     type="digit"
                     width="80"
                     :value="deliveryForm.weight"
-                    @changText="getdeliveryFormResult('weight',$event)">
+                    @changText="getDeliveryFormResult('weight',$event)">
         </input-item>
         <div class="agreement-wrapper">
           <agreement text="我同意邑点通"
@@ -219,7 +219,13 @@
   import TextareaItem from '../../components/textareaItem.vue'
   import CommonButton from '../../components/commonButton.vue'
   import {
-    showToast, showDialog, nameValidate, dormNumValidate, phoneValidate, dateValidate, timeValidate
+    showToast,
+    showDialog,
+    nameValidate,
+    dormNumValidate,
+    phoneValidate,
+    dateValidate,
+    timeValidate
   } from '../../utils/index'
   import {phoneNum} from '../../common/constant/constant'
 
@@ -322,7 +328,7 @@
           phoneNumber: phoneNum
         })
       },
-      getdeliveryFormResult(key, val){
+      getDeliveryFormResult(key, val){
         this.$nextTick(() => {
           this.$set(this.deliveryForm, key, val)
         })

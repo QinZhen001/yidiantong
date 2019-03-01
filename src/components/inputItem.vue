@@ -105,11 +105,7 @@
         this.validateVal(e.mp.detail.value)
       },
       validateVal(val){
-        if (!this.validate) {
-          this.$emit('changText', val)
-          return
-        }
-        if (this.validate(val)) {
+        if (!this.validate || this.validate(val)) {
           this.$emit('changText', val)
           return
         }
@@ -119,7 +115,13 @@
           this.curValue = ""
         })
         this.$emit('changText', "")
-        showToast(`请输入正确的${this.beforeText.replace(/\s*/g, '')}!`)
+        let toastMsg = ''
+        if(this.beforeText){
+          toastMsg =  `请输入正确的${this.beforeText.replace(/\s*/g, '')}!`
+        }else{
+          toastMsg = '请输入正确的信息!'
+        }
+        showToast(toastMsg)
       },
       clear(){
         console.log('clear')

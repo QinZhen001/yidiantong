@@ -11,17 +11,20 @@
         <span class="item-name" :class="{active:item.active}">{{item.name}}</span>
       </div>
     </div>
+    <divider></divider>
     <div class="body-item"
+         @click.stop="goToDetailInfo(index)"
          v-for="(item,index) in infoBodyItems"
          :key="index">
-      <divider></divider>
       <div class="item-content">
         <div class="lt-content">
           <image :src="item.avatarUrl"></image>
           <div class="nick-name">{{item.nickName}}</div>
         </div>
         <div class="lb-content">
-          <div class="custom-tag" v-for="(tag,index2) in item.customTag">
+          <div class="custom-tag"
+               v-for="(tag,index2) in item.customTag"
+               :key="index2">
             {{tag}}
           </div>
         </div>
@@ -35,8 +38,9 @@
           {{item.tag}}
         </div>
       </div>
+      <divider></divider>
     </div>
-    <div class="add-wrapper">
+    <div class="add-wrapper" @click.stop="goToReleaseInfo">
       <image src="/static/img/add_white.png"></image>
     </div>
   </div>
@@ -44,7 +48,10 @@
 
 <script type="text/ecmascript-6">
   import Divider from '../../components/divider.vue'
+  import {formatTime} from '../../utils/index'
+  import {mapMutations} from 'vuex'
 
+  const db = wx.cloud.database()
   export default{
     data(){
       return {
@@ -64,40 +71,79 @@
             customTag: ['受到', '是的'],
             title: '按时发了士大夫v',
             time: '2019/02/25 21:15:01'
-          },
-          {
-            avatarUrl: '/static/img/avatar.png',
-            nickName: 'aa啊大大a',
-            tag: '全部',
-            customTag: ['受到', '是的'],
-            title: '阿三地方了速度更快速度来个是的风口浪尖士大夫金龙卡',
-            time: '2019/02/25 21:15:01'
-          },
-          {
-            avatarUrl: '/static/img/avatar.png',
-            nickName: 'aaa',
-            tag: '全部',
-            customTag: ['受到', '是的'],
-            title: '按时发了士大夫v',
-            time: '2019/02/25 21:15:01'
-          },
-          {
-            avatarUrl: '/static/img/avatar.png',
-            nickName: 'aaa',
-            tag: '全部',
-            customTag: ['受到', '是的'],
-            title: '按时发了士大夫v',
-            time: '2019/02/25 21:15:01'
           }
-        ]
+        ],
+        curPage: 1, //当前页数
+        curType: '全部'
       }
+    },
+    mounted(){
+      this.getAllInfo()
+    },
+    onReachBottom(){
+      console.log('onReachBottom', '上拉')
+      this.curType === '全部' ? this.getAllInfo() : this.getInfo()
     },
     methods: {
       clickHeaderItem(index){
         this.infoHeaderItems.forEach((item, i) => {
           item.active = (index === i )
         })
-      }
+        if (this.curType !== this.infoHeaderItems[index].name) {
+          this.curType = this.infoHeaderItems[index].name
+          this.curPage = 1
+          this.curType === '全部' ? this.getAllInfo() : this.getInfo()
+        }
+      },
+      getAllInfo(){
+        db.collection('info')
+          .skip(10 * (this.curPage - 1))
+          .limit(10)
+          .get()
+          .then(res => {
+            this.curPage++
+            this.showInfo(res.data)
+          })
+      },
+      getInfo(){
+        db.collection('info')
+          .where({type: this.curType})
+          .skip(10 * (this.curPage - 1))
+          .limit(10)
+          .get()
+          .then(res => {
+            this.curPage++
+            this.showInfo(res.data)
+          })
+      },
+      showInfo(data){
+        console.log(data)
+        this.infoBodyItems = this.infoBodyItems.concat(data.map(item => ({
+          avatarUrl: item.avatarUrl,
+          nickName: item.nickName,
+          tag: item.type,
+          customTag: item.customTag,
+          title: item.title,
+          description: item.description,
+          weChat: item.weChat,
+          imgUrls: item.imgUrls,
+          time: formatTime(item.time)
+        })))
+      },
+      goToReleaseInfo(){
+        wx.navigateTo({
+          url: '/pages/releaseInfo/main'
+        })
+      },
+      goToDetailInfo(index){
+        this.setInfo(this.infoBodyItems[index])
+        wx.navigateTo({
+          url: '/pages/infodetail/main'
+        })
+      },
+      ...mapMutations({
+        setInfo: 'SET_INFO'
+      })
     },
     components: {
       Divider
@@ -220,9 +266,9 @@
       }
     }
     .add-wrapper {
-      position: absolute;
+      position: fixed;
       right: 20px;
-      bottom: 100px;
+      bottom: 80px;
       width: 60px;
       height: 60px;
       border-radius: 50%;

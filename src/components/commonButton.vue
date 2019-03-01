@@ -1,5 +1,9 @@
 <template>
-  <div class="common-button" @click.stop="clickBtn">
+  <div
+    class="common-button"
+    :class="{'show-shadow':showShadow}"
+    @click.stop="clickBtn"
+    :style="{width:width+'px'}">
     <text v-if="text">{{text}}</text>
   </div>
 </template>
@@ -9,6 +13,14 @@
     props: {
       text: {
         type: String
+      },
+      showShadow:{
+        type:Boolean,
+        default:true
+      },
+      width:{
+        type:Number,
+        default:100
       }
     },
     methods: {
@@ -24,14 +36,17 @@
   @import '../common/less/mixin1';
 
   .common-button {
+    display: inline-block;
     position: relative;
     margin: 0 auto;
-    width: 150px;
+    padding: 0 16px;
     height: 40px;
     background-color: @color-bg-red;
     border-radius: 20px;
     text-align: center;
-    .common-shadow();
+    &.show-shadow{
+      .common-shadow();
+    }
     text {
       height: 40px;
       line-height: 40px;

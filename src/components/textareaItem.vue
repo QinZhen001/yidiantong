@@ -5,6 +5,7 @@
       <text class="text" :space=space v-if="secondText">{{secondText}}</text>
     </div>
     <textarea class="textarea"
+              :style="{height: height + 'px'}"
               :placeholder="placeholder"
               :cursor-spacing="cursorSpacing"
               @blur="blur">
@@ -33,6 +34,10 @@
         type: Number,
         default: 10
       },
+      height: {
+        type: Number,
+        default: 60
+      }
     },
     methods: {
       blur(e){
@@ -65,7 +70,6 @@
       display: inline-block;
       margin-left: 10px;
       padding: 6px 10px;
-      height: 60px;
       color: @color-middle-black;
       font-size: @font-size-medium;
       background: #e8e8e8;

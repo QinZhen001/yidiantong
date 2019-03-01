@@ -7,7 +7,9 @@
     "pages/protocol/main",
     "pages/dress/main",
     "pages/water/main",
-    "pages/info/main"
+    "pages/showInfo/main",
+    "pages/releaseInfo/main",
+    "pages/infodetail/main"
   ],
   "window": {
     "navigationBarTitleText": "邑点通",
