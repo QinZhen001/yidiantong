@@ -11,7 +11,8 @@ export const navItems = [
   },
   {
     text: "学车",
-    imgUrl: '/static/img/car.png'
+    imgUrl: '/static/img/car.png',
+    pageUrl: "/pages/car/main"
   },
   {
     text: "订水",

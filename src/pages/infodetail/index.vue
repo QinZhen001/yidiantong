@@ -19,7 +19,7 @@
       <div class="wechat-text">{{info.weChat}}</div>
       <div class="btn-wrapper">
         <common-button
-          text="复制微信号"
+          text="获取微信号"
           :width="80"
           :showShadow="false"
           @clickBtn="copyWeChat">
@@ -29,9 +29,10 @@
     <divider></divider>
     <div class="img-wrapper">
       <image class="img"
-             :src="url"
              v-for="(url,index) in info.imgUrls"
-             :key="index">
+             :key="index"
+             :src="url"
+             @click.stop="previewImg(index)">
       </image>
     </div>
   </div>
@@ -40,7 +41,7 @@
 <script type="text/ecmascript-6">
   import Divider from '../../components/divider.vue'
   import CommonButton from '../../components/commonButton.vue'
-  import {formatTime} from '../../utils/index'
+  import {formatTime, showToast} from '../../utils/index'
   import {mapState} from 'vuex'
 
   export default{
@@ -51,9 +52,19 @@
 
     },
     methods: {
-//      wx.previewImage
       copyWeChat(){
-
+        wx.setClipboardData({
+          data: this.info.weChat,
+          success: (res) => {
+            showToast('复制微信号成功', 'success')
+          }
+        })
+      },
+      previewImg(index){
+        wx.previewImage({
+          current: this.info.imgUrls[index], // 当前显示图片的http链接
+          urls: this.info.imgUrls // 需要预览的图片http链接列表
+        })
       }
     },
     computed: {
@@ -137,7 +148,7 @@
       display: flex;
       align-items: center;
       justify-content: space-around;
-      margin:15px 10px;
+      margin: 15px 10px;
       background-color: @color-bg;
       .img {
         flex: 0 0 150px;

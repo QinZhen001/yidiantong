@@ -5,8 +5,17 @@ const state = {
     avatarUrl: '/static/img/avatar.png',  //头像地址
     nickName: '' //昵称
   },
-  info: {} //发布的信息
+  info: {}, //发布的信息
+  shopList: [] //购物车列表
 }
 
 
 export default state
+
+
+// shopList里的对象
+// {
+//   title: "斯展叫家",
+//   price: 258,
+//   num: 1,
+// }
