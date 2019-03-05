@@ -48,7 +48,7 @@
       background: whitesmoke;
       box-sizing: border-box;
       &:nth-child(odd), &:nth-child(even) {
-        padding: 0 4px;
+        padding: 0 5px;
       }
       &:last-child {
         flex: 0 0 auto;

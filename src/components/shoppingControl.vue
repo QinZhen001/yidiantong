@@ -12,84 +12,82 @@
         <div class="content-center">
           <div class="price" :class="{'active-price': isActive }">￥{{totalPrice}}</div>
         </div>
-        <div class="content-right" :class="{'active-right': isActive }">
+        <div class="content-right" :class="{'active-right': isActive }" @click.stop="settle">
           <div class="text">结算 ({{totalNum}})</div>
         </div>
       </div>
-      <div class="shopping-list" v-if="showShopList">
-        <div class="list-header">
-          <div class="header-left">购物车</div>
-          <div class="header-right">清空</div>
-        </div>
-        <div class="list-content">
-          <div class="list-item"
-               v-for="(item,index) in shopList"
-               :key="index">
-            <div class="item-title">{{item.title}}</div>
-            <div class="item-price">￥{{item.price}}</div>
-            <div class="item-num">数量: {{item.num}}</div>
-          </div>
-        </div>
+      <div class="shopping-list-wrapper" v-if="showShopListFlag">
+        <shopping-list :list="shopList" @clearShoppingCar="clearShoppingCar"></shopping-list>
       </div>
     </div>
-    <div class="mask" v-if="showShopList" @click.stop="clickMask"></div>
+    <div class="mask"
+         v-if="showShopListFlag"
+         @click.stop="clickMask">
+    </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import {mapState} from 'vuex'
-
+  import ShoppingList from './shoppingList.vue'
 
   const DEFAULT_LOGO_URL = '/static/img/icon_shoppingcar_default.png'
   const ACTIVE_LOGO_URL = '/static/img/icon_shoppingcar_active.png'
 
   export default{
+    props: {
+      shopList: {
+        type: Array,
+        default: []
+      }
+    },
     data(){
       return {
         logoUrl: DEFAULT_LOGO_URL,
         isActive: false,
         totalPrice: 0,
         totalNum: 0,
-//        shopList: [
-//          {
-//            title: "看积商adadadasdasdasd压约",
-//            price: 197,
-//            num: 1,
-//          },
-//          {
-//            title: "斯展叫家",
-//            price: 258,
-//            num: 1,
-//          }
-//        ],
-        showShopList: false,
+        showShopListFlag: false,
       }
     },
     methods: {
       showList(){
         if (this.shopList.length) {
-          this.showShopList = true
+          this.showShopListFlag = true
         }
       },
       clickMask(){
-        this.showShopList = false
+        this.showShopListFlag = false
       },
+      clearShoppingCar(){
+        this.$emit('clearShoppingCar')
+      },
+      settle(){
+        if (this.shopList.length) {
+          this.$emit('settle')
+        }
+      }
     },
     watch: {
-      shopList(newVal, oldVal){
-        if (newVal.length) {
+      shopList(newArr, oldArr){
+        if (newArr.length) {
           this.isActive = true
           this.logoUrl = ACTIVE_LOGO_URL
         } else {
           this.isActive = false
           this.logoUrl = DEFAULT_LOGO_URL
+          this.showShopListFlag = false
         }
+        this.totalNum = 0
+        this.totalPrice = 0
+        newArr.forEach(item => {
+          this.totalPrice += item.num * item.price
+          this.totalNum += item.num
+        })
       },
     },
-    computed: {
-      ...mapState([
-        'shopList'
-      ])
+    components: {
+      ShoppingList
     }
   }
 </script>
@@ -176,7 +174,7 @@
         }
       }
     }
-    .shopping-list {
+    .shopping-list-wrapper {
       position: absolute;
       left: 0;
       top: 0;
@@ -184,65 +182,6 @@
       transform: translate3d(0, -100%, 0);
       transition: all 0.5s;
       z-index: -1;
-      .list-header {
-        height: 40px;
-        line-height: 40px;
-        padding: 0 18px;
-        background: #f3f5f7;
-        border-bottom: 1px solid rgba(7, 17, 27, 0.1);
-        box-sizing: border-box;
-        .header-left {
-          float: left;
-          font-size: 14px;
-          color: rgb(7, 17, 27);
-        }
-        .header-right {
-          float: right;
-          font-size: 12px;
-          color: rgb(0, 160, 220);
-        }
-      }
-      .list-content {
-        padding: 0 18px;
-        max-height: 217px;
-        overflow: hidden;
-        background: #fff;
-        .list-item {
-          display: flex;
-          align-items: center;
-          height: 48px;
-          box-sizing: border-box;
-          border-bottom: 1px solid rgba(7, 17, 27, 0.1);
-          &:last-child {
-            border-bottom: none;
-          }
-          .item-title, .item-price, .item-num {
-            display: inline-block;
-            font-size: 14px;
-          }
-          .item-title {
-            flex: 0 0 110px;
-            line-height: 24px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            color: rgb(7, 17, 27);
-          }
-          .item-price {
-            flex: 1 1 auto;
-            box-sizing: border-box;
-            padding-left: 5px;
-            line-height: 24px;
-            height: 24px;
-            font-weight: 700;
-            color: rgb(240, 20, 20);
-          }
-          .item-num {
-            flex: 0 0 auto;
-            color: #ddd;
-          }
-        }
-      }
     }
   }
 

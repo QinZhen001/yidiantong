@@ -17,7 +17,11 @@
     <div class="leaflet-wrapper" v-if="curIndex===2">
       leaflet-wrapper
     </div>
-    <shopping-control></shopping-control>
+    <shopping-control
+      :shopList="shopList"
+      @settle="settleGoods"
+      @clearShoppingCar="clearShoppingCar">
+    </shopping-control>
   </div>
 </template>
 
@@ -26,15 +30,15 @@
   import ShoppingControl from '../../components/shoppingControl.vue'
   import DressList from '../../components/dressList.vue'
   import {request} from '../../api/request'
+  import {userInfoMixin} from '../../common/mixin/mixin'
+  import {showToast} from '../../utils/index'
   import {mapMutations, mapState} from 'vuex'
 
   const DRESS_SHOW = 0, DISCOUNT_SHOW = 1, LEAFLET_SHOW = 2;
-
+  const db = wx.cloud.database()
 
   export default{
-    created(){
-//      this.getDressList()
-    },
+    mixins: [userInfoMixin],
     data(){
       return {
         dressList: [{
@@ -85,7 +89,7 @@
             "stock": 97
           }
         ],
-        curIndex: 0
+        curIndex: DRESS_SHOW
       }
     },
     methods: {
@@ -103,10 +107,47 @@
       chooseGoods(item){
         console.log(item)
         let hasChanged = false
-//        this.shopList.forEach(item => {
-//          if(item.name === )
-//        })
-        setShopList()
+        let newShopList = JSON.parse(JSON.stringify(this.shopList))
+        this.shopList.forEach((i, index) => {
+          if (i.title === item.title) {
+            newShopList[index].num++
+            hasChanged = true
+          }
+        })
+        if (!hasChanged) {
+          newShopList.push({
+            title: item.title,
+            price: item.price,
+            num: 1
+          })
+        }
+        this.setShopList(newShopList)
+      },
+      clearShoppingCar(){
+        this.setShopList([])
+      },
+      settleGoods(){
+        wx.showModal({
+          title: '结算',
+          content: '确定要结算这些商品吗?',
+          success: (res) => {
+            if (res.confirm) {
+              this.commitOrder()
+            }
+          }
+        })
+      },
+      commitOrder(){
+        db.collection('order').add({
+          data: {
+            shopList: this.shopList,
+            time: new Date(),
+            nickName: this.userInfo.nickName
+          }
+        }).then(res => {
+          showToast('结算成功', 'success')
+          this.setShopList([])
+        })
       },
       ...mapMutations({
         setShopList: 'SET_SHOP_LIST'

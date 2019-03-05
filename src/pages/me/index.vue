@@ -6,15 +6,15 @@
         <div class="avatar-wrapper">
           <img :src="userInfo.avatarUrl" alt="">
         </div>
-        <!--<div class="username">{{userInfo.nickName}}</div>-->
-        <div class="username">我的名字</div>
+        <div class="username">{{userInfo.nickName}}</div>
       </div>
     </div>
     <divider height="15px"></divider>
     <div class="me-list">
       <div v-for="(item,index) in userList"
            :key="index"
-           class="item">
+           class="item"
+           @click.stop="jump(item)">
         <div class="item-left">
           <img :src="item.iconUrl" alt="">
         </div>
@@ -38,18 +38,32 @@
     data(){
       return {
         userList: [
-          {name: '购物车', iconUrl: '/static/img/me/shopping_car.png'},
-          {name: '我的订单', iconUrl: '/static/img/me/order.png'},
-          {name: '我的发布', iconUrl: '/static/img/me/release.png'},
-          {name: '我的快递', iconUrl: '/static/img/me/express.png'},
-          {name: '我的优惠卷', iconUrl: '/static/img/me/coupon.png'},
+          {
+            name: '我的购物车',
+            iconUrl: '/static/img/me/shopping_car.png',
+            url: '/pages/me-shoppingcar/main'
+          },
+          {
+            name: '我的订单',
+            iconUrl: '/static/img/me/order.png'
+          },
+          {
+            name: '我的发布',
+            iconUrl: '/static/img/me/release.png'
+          },
+          {
+            name: '我的快递',
+            iconUrl: '/static/img/me/express.png'
+          },
+          {
+            name: '我的优惠卷',
+            iconUrl: '/static/img/me/coupon.png',
+            url: '/pages/coupon/main'
+          },
         ]
       }
     },
     methods: {
-      login(){
-
-      },
       test(){
         console.log('test')
         wx.getUserInfo({
@@ -57,6 +71,13 @@
             console.log(res.userInfo)
           }
         })
+      },
+      jump(item){
+        if (item.url) {
+          wx.navigateTo({
+            url: item.url
+          })
+        }
       }
     },
     components: {
@@ -88,12 +109,14 @@
         left: 50%;
         height: 50%;
         transform: translate(-50%, -50%);
+        font-size: 0;
         .avatar-wrapper {
           width: 100px;
           height: 100px;
           border-radius: 50%;
           background-color: @color-bg;
           border: 2px solid @color-divider;
+          box-sizing: border-box;
           img {
             width: 100%;
             height: 100%;
