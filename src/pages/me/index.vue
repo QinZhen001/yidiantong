@@ -45,7 +45,8 @@
           },
           {
             name: '我的订单',
-            iconUrl: '/static/img/me/order.png'
+            iconUrl: '/static/img/me/order.png',
+            url: '/pages/me-order/main'
           },
           {
             name: '我的发布',
@@ -58,7 +59,7 @@
           {
             name: '我的优惠卷',
             iconUrl: '/static/img/me/coupon.png',
-            url: '/pages/coupon/main'
+            url: "/pages/me-coupon/main",
           },
         ]
       }

@@ -12,10 +12,10 @@
       </dress-list>
     </div>
     <div class="discount-wrapper" v-if="curIndex===1">
-      <dress-list :dressList="dressList"></dress-list>
+      <dress-list :dressList="discountList" @chooseItem="chooseGoods"></dress-list>
     </div>
     <div class="leaflet-wrapper" v-if="curIndex===2">
-      leaflet-wrapper
+      <image src="/static/img/leaflet.jpg"></image>
     </div>
     <shopping-control
       :shopList="shopList"
@@ -33,6 +33,8 @@
   import {userInfoMixin} from '../../common/mixin/mixin'
   import {showToast} from '../../utils/index'
   import {mapMutations, mapState} from 'vuex'
+  import {productList, discountList} from '../../common/constant/constant'
+
 
   const DRESS_SHOW = 0, DISCOUNT_SHOW = 1, LEAFLET_SHOW = 2;
   const db = wx.cloud.database()
@@ -41,67 +43,13 @@
     mixins: [userInfoMixin],
     data(){
       return {
-        dressList: [{
-          "imgUrl": "/static/img/dress.png",
-          "title": "则图太照确制",
-          "price": 197,
-          "stock": 38
-        }, {
-          "imgUrl": "/static/img/dress.png",
-          "title": "至正量老且",
-          "price": 149,
-          "stock": 17
-        }, {
-          "imgUrl": "/static/img/dress.png",
-          "title": "须部实口型",
-          "price": 77,
-          "stock": 33
-        }, {
-          "imgUrl": "/static/img/dress.png",
-          "title": "亲步准",
-          "price": 192,
-          "stock": 22
-        }, {
-          "imgUrl": "/static/img/dress.png",
-          "title": "总毛观车应无",
-          "price": 127,
-          "stock": 79
-        }, {
-          "imgUrl": "/static/img/dress.png",
-          "title": "命细证斗亲",
-          "price": 269,
-          "stock": 91
-        }, {
-          "imgUrl": "/static/img/dress.png",
-          "title": "看积商压约",
-          "price": 197,
-          "stock": 22
-        }, {
-          "imgUrl": "/static/img/dress.png",
-          "title": "地事实眼农来",
-          "price": 202,
-          "stock": 84
-        },
-          {
-            "imgUrl": "/static/img/dress.png",
-            "title": "斯展叫家",
-            "price": 258,
-            "stock": 97
-          }
-        ],
+        dressList: productList,
+        discountList: discountList,
         curIndex: DRESS_SHOW
       }
     },
     methods: {
-//      async getDressList(){
-//        const res = await request('/dressList')
-//        this.dressList = res.data.dressList
-//        console.log(this.dressList)
-//      },
       changeNav(index){
-        if (index === DISCOUNT_SHOW) {
-          this.getDressList()
-        }
         this.curIndex = index
       },
       chooseGoods(item){
@@ -173,9 +121,22 @@
     width: 100%;
     min-height: 100vh;
     background-color: @color-bg;
-    .dress-wrapper, .discount-wrapper, .leaflet-wrapper {
+    .dress-wrapper, .discount-wrapper, {
       padding-top: 5px;
       padding-bottom: 50px;
+    }
+    .leaflet-wrapper {
+      padding-top: 0;
+      padding-bottom: 0;
+      position: absolute;
+      left: 0;
+      top: 200px;
+      width: 100%;
+      height: 100%;
+      image {
+        width: 100%;
+        height: 100%;
+      }
     }
   }
 </style>
