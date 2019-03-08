@@ -19,10 +19,10 @@
         </div>
         <div class="right">
           <div class="right-first-item">
-            <img src="/static/img/dress.png" alt="">
+            <img src="/static/img/tong_water.jpg" alt="">
             <div class="item-content">
-              <p class="up-text">加仑加</p>
-              <p class="down-text">原价：23元/桶</p>
+              <p class="up-text">{{curWaterName}}</p>
+              <p class="down-text">原价：{{curWaterPrice}}元/桶</p>
             </div>
           </div>
           <div class="right-item"
@@ -110,8 +110,9 @@
   import CommonButton from '../../components/commonButton.vue'
   import ImgHeader from '../../components/imgHeader.vue'
   import InputItem from '../../components/inputItem.vue'
-  import {request} from '../../api/request'
+  //  import {request} from '../../api/request'
   import {phoneNum} from '../../common/constant/constant'
+  import {getRandomNum}  from '../../utils/index'
 
 
   const WATER_RESERVE = 0, //展示掌上定水
@@ -122,10 +123,36 @@
   export default{
     data(){
       return {
-        curWaterIndex: 0,
         curNavIndex: 0,
         waterNames: ['沁源山泉', '七翁井山泉', '古兜山矿泉', '加仑加', '华山泉', '怡宝'],
-        waterList: [],
+        waterList: [{
+          "title": "A套餐",
+          "chose": false,
+          "description": " 20送18",
+          "averagePrice": 10,
+          "totalPrice": 616
+        }, {
+          "title": "B套餐",
+          "chose": false,
+          "description": " 21送11",
+          "averagePrice": 11,
+          "totalPrice": 373
+        }, {
+          "title": "C套餐",
+          "chose": false,
+          "description": " 25送16",
+          "averagePrice": 14,
+          "totalPrice": 528
+        }, {
+          "title": "D套餐",
+          "chose": false,
+          "description": " 23送13",
+          "averagePrice": 16,
+          "totalPrice": 367
+        }],
+        curWaterIndex: 0,
+        curWaterName: '沁源山泉',
+        curWaterPrice: 23,
         showQueryResult: false,
         restWater: 100, //余水
         restBucket: 2 //余桶
@@ -138,10 +165,16 @@
       changeNav(index){
         this.curNavIndex = index
       },
-      async getWaterList(){
-        const res = await request('/waterList')
-        this.waterList = res.data.waterList
-        console.log(this.waterList)
+      getWaterList(){
+//       const res = await request('/waterList')
+//       this.waterList = res.data.waterList
+        console.log('getWaterList')
+        this.waterList = this.waterList.map(item => ({
+          ...item,
+          chose: false,
+          averagePrice: getRandomNum(10, 20),
+          totalPrice: getRandomNum(350, 650)
+        }))
       },
       chooseProduct(index){
         console.log()
@@ -152,6 +185,7 @@
       },
       chooseWater(index){
         this.curWaterIndex = index
+        this.getWaterList()
       },
       comfirmWater(){
         this.curNavIndex = WATER_FILL
@@ -163,6 +197,12 @@
         wx.makePhoneCall({
           phoneNumber: phoneNum
         })
+      }
+    },
+    watch: {
+      curWaterIndex(newVal, oldVal){
+        this.curWaterName = this.waterNames[newVal]
+        this.curWaterPrice = getRandomNum(20, 25)
       }
     },
     computed: {
@@ -318,27 +358,30 @@
         }
       }
       .bottom-text {
-        margin-top: 8px;
         display: flex;
+        margin-top: 8px;
+        margin-left: 95px;
+        box-sizing: border-box;
+        color: @color-middle-black;
         .left {
-          flex: 0 0 90px;
-          width: 90px;
+          flex: 0 0 auto;
           text-align: right;
         }
         .right {
           flex: 1 1 auto;
         }
         .text {
+          .no-wrap();
           font-size: @font-size-small;
-          color: @color-middle-black;
         }
       }
       .button-wrapper {
         padding-top: 8px;
         position: relative;
+        text-align: center;
         .phone-wrapper {
           position: absolute;
-          top: -15px;
+          top: -10px;
           right: 25px;
           width: 40px;
           height: 40px;

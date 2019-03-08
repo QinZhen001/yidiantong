@@ -103,6 +103,15 @@ export function md5(str) {
   return MD5(str)
 }
 
+/**
+ * 返回一个[minNum,maxNum]之间的随机整数
+ * @param minNum 最小值
+ * @param maxNum 最大值
+ * @returns {Number}
+ */
+export function getRandomNum(minNum, maxNum) {
+  return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10);
+}
 
 /**
  * 验证是否为正确的姓名

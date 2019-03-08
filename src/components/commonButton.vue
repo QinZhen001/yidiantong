@@ -2,8 +2,7 @@
   <div
     class="common-button"
     :class="{'show-shadow':showShadow}"
-    @click.stop="clickBtn"
-    :style="{width:width+'px'}">
+    @click.stop="clickBtn">
     <text v-if="text">{{text}}</text>
   </div>
 </template>
@@ -17,10 +16,6 @@
       showShadow:{
         type:Boolean,
         default:true
-      },
-      width:{
-        type:Number,
-        default:100
       }
     },
     methods: {

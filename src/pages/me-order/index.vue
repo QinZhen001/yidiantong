@@ -6,7 +6,10 @@
           <div class="header-left">{{item.time}}</div>
           <div class="header-right">已下单</div>
         </div>
-        <div v-for="(product,i) in item.shopList" class="shop-list-item">
+        <div
+          class="shop-list-item"
+          v-for="(product,i) in item.shopList"
+          :key="i">
           <div class="title">{{product.title}}</div>
           <div class="price">价格: {{product.price}}</div>
           <div class="num">数量: {{product.num}}</div>

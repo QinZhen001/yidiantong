@@ -8,30 +8,35 @@
       <div class="header-right">
         <common-button
           text="发布"
-          :width="42"
           :showShadow="false"
           @clickBtn="releaseInfo">
         </common-button>
       </div>
     </div>
     <div class="release-body">
-      <input-item beforeText="标 题"
-                  placeholder="请输入正确的标题"
-                  type="text"
-                  :value="releaseForm.title"
-                  @changText="getReleaseFormResult('title',$event)">
+      <input-item
+        ref="titleInput"
+        beforeText="标 题"
+        placeholder="请输入正确的标题"
+        type="text"
+        :value="releaseForm.title"
+        @changText="getReleaseFormResult('title',$event)">
       </input-item>
-      <input-item beforeText="微信号"
-                  placeholder="方便他人一键复制"
-                  type="text"
-                  :value="releaseForm.title"
-                  @changText="getReleaseFormResult('weChat',$event)">
+      <input-item
+        ref="weChatInput"
+        beforeText="微信号"
+        placeholder="方便他人一键复制"
+        type="text"
+        :value="releaseForm.title"
+        @changText="getReleaseFormResult('weChat',$event)">
       </input-item>
-      <input-item beforeText="标 签"
-                  placeholder="输入自定义标签(以空格隔开)"
-                  type="text"
-                  :value="releaseForm.title"
-                  @changText="getReleaseFormResult('customTag',$event)">
+      <input-item
+        ref="tagInput"
+        beforeText="标 签"
+        placeholder="输入自定义标签(以空格隔开)"
+        type="text"
+        :value="releaseForm.title"
+        @changText="getReleaseFormResult('customTag',$event)">
       </input-item>
       <div class="picker-wrapper">
         <picker
@@ -84,6 +89,16 @@
 
   export default{
     mixins: [userInfoMixin],
+//    onShow(){
+//      this.clearData()
+//    },
+//    onHide(){
+//      this.clearData()
+//    },
+    onUnload(){
+      console.log('onUnload')
+      this.clearData()
+    },
     data(){
       return {
         releaseForm: {
@@ -122,16 +137,10 @@
         }
       },
       successRelease(){
-        this.releaseForm.title = ''
-        this.releaseForm.description = ''
-        this.releaseForm.weChat = ''
-        this.releaseForm.type = ''
-        this.releaseForm.customTag = []
-        this.releaseForm.imgUrLs = []
         showToast('信息成功发布!', 'success')
-        setTimeout(() => {
+        wx.nextTick(() => {
           wx.navigateBack()
-        }, 1000)
+        })
       },
       checkInfo(){
         let str = ''
@@ -207,6 +216,18 @@
 //        console.log('index',index)
         this.releaseForm.imgUrLs.splice(index, 1)
         this.showImgUrls.splice(index, 1)
+      },
+      clearData(){
+        this.releaseForm.title = ''
+        this.releaseForm.description = ''
+        this.releaseForm.weChat = ''
+        this.releaseForm.type = ''
+        this.releaseForm.customTag = []
+        this.releaseForm.imgUrLs = []
+        this.showImgUrls = []
+        this.$refs.titleInput.clear()
+        this.$refs.weChatInput.clear()
+        this.$refs.tagInput.clear()
       }
     },
     computed: {

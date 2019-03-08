@@ -11,35 +11,43 @@
         <span class="item-name" :class="{active:item.active}">{{item.name}}</span>
       </div>
     </div>
-    <divider></divider>
-    <div class="body-item"
-         @click.stop="goToDetailInfo(index)"
-         v-for="(item,index) in infoBodyItems"
-         :key="index">
-      <div class="item-content">
-        <div class="lt-content">
-          <image :src="item.avatarUrl"></image>
-          <div class="nick-name">{{item.nickName}}</div>
-        </div>
-        <div class="lb-content">
-          <div class="custom-tag"
-               v-for="(tag,index2) in item.customTag"
-               :key="index2">
-            {{tag}}
+    <scroll-view
+      class="info-body"
+      scroll-y="true"
+      @scroll="scroll"
+      @scrolltolower="scrollToLower">
+      <div class="body-item"
+           @click.stop="goToDetailInfo(index)"
+           v-for="(item,index) in infoBodyItems"
+           :key="index">
+        <divider></divider>
+        <div class="item-content">
+          <div class="lt-content">
+            <image :src="item.avatarUrl"></image>
+            <div class="nick-name">{{item.nickName}}</div>
+          </div>
+          <div class="lb-content">
+            <div class="custom-tag"
+                 v-for="(tag,index2) in item.customTag"
+                 :key="index2">
+              {{tag}}
+            </div>
+          </div>
+          <div class="center-content">
+            {{item.title}}
+          </div>
+          <div class="rt-content">
+            {{item.time}}
+          </div>
+          <div class="rb-content">
+            {{item.tag}}
           </div>
         </div>
-        <div class="center-content">
-          {{item.title}}
-        </div>
-        <div class="rt-content">
-          {{item.time}}
-        </div>
-        <div class="rb-content">
-          {{item.tag}}
+        <div v-if="index===infoBodyItems.length-1">
+          <divider></divider>
         </div>
       </div>
-      <divider></divider>
-    </div>
+    </scroll-view>
     <div class="add-wrapper" @click.stop="goToReleaseInfo">
       <image src="/static/img/add_white.png"></image>
     </div>
@@ -64,25 +72,31 @@
           {name: '其他', color: '#3F51B5', active: false},
         ],
         infoBodyItems: [
-          {
-            avatarUrl: '/static/img/avatar.png',
-            nickName: 'aaa',
-            tag: '全部',
-            customTag: ['受到', '是的'],
-            title: '按时发了士大夫v',
-            time: '2019/02/25 21:15:01'
-          }
+//          {
+//            avatarUrl: '/static/img/avatar.png',
+//            nickName: 'aaa',
+//            tag: '全部',
+//            customTag: ['受到', '是的'],
+//            title: '按时发了士大夫v',
+//            time: '2019/02/25 21:15:01'
+//          }
         ],
         curPage: 1, //当前页数
         curType: '全部'
       }
     },
-    mounted(){
-      this.getAllInfo()
+    onShow(){
+//      console.log('onShow')
+      this.curPage = 1
+      this.curType = '全部'
+      this.getAllInfo(true)
     },
-    onReachBottom(){
-      console.log('onReachBottom', '上拉')
-      this.curType === '全部' ? this.getAllInfo() : this.getInfo()
+    onHide(){
+      this.curPage = 1
+    },
+    onUnload(){
+//      console.log('onUnload')
+      this.curPage = 1
     },
     methods: {
       clickHeaderItem(index){
@@ -92,32 +106,41 @@
         if (this.curType !== this.infoHeaderItems[index].name) {
           this.curType = this.infoHeaderItems[index].name
           this.curPage = 1
-          this.curType === '全部' ? this.getAllInfo() : this.getInfo()
+          this.curType === '全部' ? this.getAllInfo(true) : this.getInfo(true)
         }
       },
-      getAllInfo(){
+      getAllInfo(isFirstPage){
+//        isFirstPage 是否是第一页
         db.collection('info')
           .skip(10 * (this.curPage - 1))
           .limit(10)
           .get()
           .then(res => {
-            this.curPage++
+            console.log('this.curPage', this.curPage)
+            if (isFirstPage) {
+              this.infoBodyItems = []
+            }
             this.showInfo(res.data)
+            this.curPage++
           })
       },
-      getInfo(){
+      getInfo(isFirstPage){
+        // isFirstPage 是否是第一页
         db.collection('info')
           .where({type: this.curType})
           .skip(10 * (this.curPage - 1))
           .limit(10)
           .get()
           .then(res => {
-            this.curPage++
+            if (isFirstPage) {
+              this.infoBodyItems = []
+            }
             this.showInfo(res.data)
+            this.curPage++
           })
       },
       showInfo(data){
-        console.log(data)
+        console.log('data', data)
         this.infoBodyItems = this.infoBodyItems.concat(data.map(item => ({
           avatarUrl: item.avatarUrl,
           nickName: item.nickName,
@@ -141,6 +164,13 @@
           url: '/pages/infodetail/main'
         })
       },
+      scrollToLower(){
+        console.log('scrollToLower', '上拉')
+        this.curType === '全部' ? this.getAllInfo(false) : this.getInfo(false)
+      },
+      scroll(){
+        console.log('scroll')
+      },
       ...mapMutations({
         setInfo: 'SET_INFO'
       })
@@ -159,12 +189,16 @@
     height: 100vh;
     background-color: @color-bg;
     .info-header {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 60px;
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 100%;
-      height: 60px;
       background-color: white;
+      z-index: 1;
       .header-item {
         position: relative;
         flex: 1 1 auto;
@@ -178,8 +212,8 @@
         }
         .item-bg {
           &.active {
-            width: 48px;
-            height: 48px;
+            width: 50px;
+            height: 50px;
           }
           width: 44px;
           height: 44px;
@@ -194,86 +228,96 @@
         }
       }
     }
-    .body-item {
-      .item-content {
-        position: relative;
-        width: 100%;
-        height: 90px;
-        .lt-content {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          position: absolute;
-          left: 6px;
-          top: 2px;
-          height: 30px;
-          image {
-            flex: 0 0 26px;
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-          }
-          .nick-name {
-            margin-left: 4px;
-            flex: 1 1 auto;
-            display: inline-block;
+    .info-body {
+      padding-top: 60px;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      .body-item {
+        &:last-child {
+          padding-bottom: 10px;
+        }
+        .item-content {
+          position: relative;
+          width: 100%;
+          height: 90px;
+          .lt-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            left: 6px;
+            top: 2px;
             height: 30px;
-            line-height: 30px;
+            image {
+              flex: 0 0 26px;
+              width: 26px;
+              height: 26px;
+              border-radius: 50%;
+            }
+            .nick-name {
+              margin-left: 4px;
+              flex: 1 1 auto;
+              display: inline-block;
+              height: 30px;
+              line-height: 30px;
+              font-size: @font-size-medium;
+            }
+          }
+          .lb-content {
+            position: absolute;
+            left: 6px;
+            bottom: 6px;
+            .custom-tag {
+              &:not(:first-child) {
+                margin-left: 6px;
+              }
+              padding: 0 4px;
+              display: inline-block;
+              font-size: @font-size-small;
+              background-color: #CDDC39;
+              color: #8BC34A;
+              border-radius: 4px;
+            }
+          }
+          .center-content {
+            max-width: 200px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            display: inline-block;
+            transform: translate(-50%, -50%);
             font-size: @font-size-medium;
           }
-        }
-        .lb-content {
-          position: absolute;
-          left: 6px;
-          bottom: 6px;
-          .custom-tag {
-            &:not(:first-child) {
-              margin-left: 8px;
-            }
-            padding: 0 4px;
-            display: inline-block;
+          .rt-content {
+            position: absolute;
+            right: 8px;
+            top: 2px;
             font-size: @font-size-small;
-            background-color: #CDDC39;
-            color: #8BC34A;
-            border-radius: 8px 8px;
+            color: @color-bg-red;
           }
-        }
-        .center-content {
-          position: absolute;
-          left: 50%;
-          top: 50%;
-          display: inline-block;
-          transform: translate(-50%, -50%);
-          font-size: @font-size-medium;
-        }
-        .rt-content {
-          position: absolute;
-          right: 8px;
-          top: 2px;
-          font-size: @font-size-small;
-          color: @color-bg-red;
-        }
-        .rb-content {
-          padding: 0 4px;
-          position: absolute;
-          right: 8px;
-          bottom: 6px;
-          font-size: @font-size-medium;
-          background-color: #FFEB3B;
-          color: @color-bg-red;
-          border-radius: 8px 8px;
+          .rb-content {
+            padding: 0 4px;
+            position: absolute;
+            right: 8px;
+            bottom: 6px;
+            font-size: @font-size-medium;
+            background-color: #FFEB3B;
+            color: @color-bg-red;
+            border-radius: 4px;
+          }
         }
       }
     }
     .add-wrapper {
       position: fixed;
       right: 20px;
-      bottom: 80px;
+      bottom: 60px;
       width: 60px;
       height: 60px;
       border-radius: 50%;
       background-color: @color-bg-red;
-      box-shadow: 4px 4px 3px #ddd;
+      box-shadow: 4px 4px 2px @color-divider;
       image {
         position: absolute;
         left: 50%;

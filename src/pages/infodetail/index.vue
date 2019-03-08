@@ -11,9 +11,9 @@
     <div class="title" v-if="info.title">
       {{info.title}}
     </div>
-    <div class="description" v-if="info.description">
+    <text class="description" v-if="info.description" selectable="true">
       {{info.description}}
-    </div>
+    </text>
     <div class="wechat-wrapper" v-if="info.weChat">
       <image src="/static/img/icon_wechat.png"></image>
       <div class="wechat-text">{{info.weChat}}</div>
@@ -28,12 +28,15 @@
     </div>
     <divider></divider>
     <div class="img-wrapper">
-      <image class="img"
-             v-for="(url,index) in info.imgUrls"
-             :key="index"
-             :src="url"
-             @click.stop="previewImg(index)">
-      </image>
+      <div class="img-item"
+           v-for="(url,index) in info.imgUrls"
+           :key="index">
+        <image
+          class="img"
+          :src="url"
+          @click.stop="previewImg(index)">
+        </image>
+      </div>
     </div>
   </div>
 </template>
@@ -120,7 +123,12 @@
       font-size: @font-size-medium-x;
     }
     .description {
-      padding: 10px 15px;
+      box-sizing: border-box;
+      padding: 5px 10px;
+      display: block;
+      width: 100%;
+      height: auto;
+      color: @color-middle-black;
       font-size: @font-size-medium
     }
     .wechat-wrapper {
@@ -145,15 +153,25 @@
       }
     }
     .img-wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      margin: 15px 10px;
+      width: 100%;
+      box-sizing: border-box;
+      font-size: 0;
       background-color: @color-bg;
-      .img {
-        flex: 0 0 150px;
-        width: 150px;
+      .img-item {
+        margin-top: 12px;
+        display: inline-block;
+        width: 50%;
         height: 200px;
+        text-align: center;
+        box-sizing: border-box;
+        &:last-child {
+          margin-bottom: 12px;
+        }
+        .img {
+          display: inline-block;
+          width: 80%;
+          height: 100%;
+        }
       }
     }
   }

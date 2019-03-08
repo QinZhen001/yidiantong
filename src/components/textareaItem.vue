@@ -5,6 +5,7 @@
       <text class="text" :space=space v-if="secondText">{{secondText}}</text>
     </div>
     <textarea class="textarea"
+              maxlength="250"
               :style="{height: height + 'px'}"
               :placeholder="placeholder"
               :cursor-spacing="cursorSpacing"
