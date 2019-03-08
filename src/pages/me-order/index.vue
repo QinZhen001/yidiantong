@@ -6,6 +6,11 @@
           <div class="header-left">{{item.time}}</div>
           <div class="header-right">已下单</div>
         </div>
+        <div class="center" v-if="item.name">
+          <div class="center-name">{{item.name}}</div>
+          <div class="center-dorm">宿舍号:{{item.dorm}}</div>
+          <div class="center-phone">手机:{{item.phoneNum}}</div>
+        </div>
         <div
           class="shop-list-item"
           v-for="(product,i) in item.shopList"
@@ -94,16 +99,35 @@
             border: 1px solid @color-font-red;
           }
         }
-        .shop-list-item {
+        .center, .shop-list-item {
           display: flex;
           align-items: center;
           width: 100%;
           height: 30px;
           font-size: @font-size-medium;
+          color: @color-middle-black;
+        }
+        .center {
+          .center-name {
+            .no-wrap();
+            flex: 0 0 120px;
+            width: 120px;
+            font-weight: 700;
+          }
+          .center-dorm {
+            font-size: @font-size-small;
+            flex: 1 1 auto;
+          }
+          .center-phone {
+            font-size: @font-size-small;
+            flex: 0 0 auto;
+          }
+        }
+        .shop-list-item {
           .title {
             flex: 0 0 120px;
             width: 120px;
-            .no-wrap()
+            .no-wrap();
           }
           .price {
             flex: 1 1 auto;

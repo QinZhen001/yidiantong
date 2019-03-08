@@ -2,6 +2,7 @@
   <div
     class="common-button"
     :class="{'show-shadow':showShadow}"
+    :style="{padding: '0 '+ padding + 'px' }"
     @click.stop="clickBtn">
     <text v-if="text">{{text}}</text>
   </div>
@@ -13,9 +14,13 @@
       text: {
         type: String
       },
-      showShadow:{
-        type:Boolean,
-        default:true
+      showShadow: {
+        type: Boolean,
+        default: true
+      },
+      padding: {
+        type: Number | String,
+        default: 16
       }
     },
     methods: {
@@ -34,12 +39,11 @@
     display: inline-block;
     position: relative;
     margin: 0 auto;
-    padding: 0 16px;
     height: 40px;
     background-color: @color-bg-red;
     border-radius: 20px;
     text-align: center;
-    &.show-shadow{
+    &.show-shadow {
       .common-shadow();
     }
     text {

@@ -131,3 +131,32 @@ export const discountList = [
   }
 ]
 
+
+export const waterList = [
+  {
+    "title": "A套餐",
+    "chose": false,
+    "description": " 20送18",
+    "averagePrice": 10,
+    "totalPrice": 616
+  }, {
+    "title": "B套餐",
+    "chose": false,
+    "description": " 21送11",
+    "averagePrice": 11,
+    "totalPrice": 373
+  }, {
+    "title": "C套餐",
+    "chose": false,
+    "description": " 25送16",
+    "averagePrice": 14,
+    "totalPrice": 528
+  }, {
+    "title": "D套餐",
+    "chose": false,
+    "description": " 23送13",
+    "averagePrice": 16,
+    "totalPrice": 367
+  }
+]
+

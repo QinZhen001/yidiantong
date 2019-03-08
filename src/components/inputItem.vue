@@ -8,6 +8,7 @@
     <input class="input"
            v-if="type==='text'"
            type="text"
+           :password="password"
            v-model.lazy="curValue"
            :style="{flex:'0 0 '+ width +'px'}"
            :confirm-type="confirmType"
@@ -17,6 +18,7 @@
     <input class="input"
            v-else-if="type==='number'"
            type="number"
+           :password="password"
            v-model.lazy="curValue"
            :style="{flex:'0 0 '+ width +'px'}"
            :confirm-type="confirmType"
@@ -26,6 +28,7 @@
     <input class="input"
            v-else-if="type==='digit'"
            type="digit"
+           :password="password"
            v-model.lazy="curValue"
            :style="{flex:'0 0 '+ width +'px'}"
            :confirm-type="confirmType"
@@ -44,6 +47,10 @@
 
   export default{
     props: {
+      password: {
+        type: Boolean,
+        default: false
+      },
       space: {
         type: String,
         default: 'emsp'
@@ -116,9 +123,9 @@
         })
         this.$emit('changText', "")
         let toastMsg = ''
-        if(this.beforeText){
-          toastMsg =  `请输入正确的${this.beforeText.replace(/\s*/g, '')}!`
-        }else{
+        if (this.beforeText) {
+          toastMsg = `请输入正确的${this.beforeText.replace(/\s*/g, '')}!`
+        } else {
           toastMsg = '请输入正确的信息!'
         }
         showToast(toastMsg)
