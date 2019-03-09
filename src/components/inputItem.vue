@@ -131,7 +131,6 @@
         showToast(toastMsg)
       },
       clear(){
-        console.log('clear')
         this.curValue = ""
       }
     }

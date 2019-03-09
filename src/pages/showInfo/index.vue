@@ -60,6 +60,7 @@
   import {mapMutations} from 'vuex'
 
   const db = wx.cloud.database()
+
   export default{
     data(){
       return {

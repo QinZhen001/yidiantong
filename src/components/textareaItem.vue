@@ -6,6 +6,7 @@
     </div>
     <textarea class="textarea"
               maxlength="250"
+              v-model.lazy="curValue"
               :style="{height: height + 'px'}"
               :placeholder="placeholder"
               :cursor-spacing="cursorSpacing"
@@ -17,6 +18,9 @@
 <script type="text/ecmascript-6">
   export default{
     props: {
+      value: {
+        type: String
+      },
       space: {
         type: String,
         default: 'emsp'
@@ -40,9 +44,17 @@
         default: 60
       }
     },
+    data(){
+      return {
+        curValue: this.value
+      }
+    },
     methods: {
       blur(e){
         this.$emit('changText', e.mp.detail.value)
+      },
+      clear(){
+        this.curValue = ""
       }
     }
   }

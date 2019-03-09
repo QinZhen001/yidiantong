@@ -121,7 +121,7 @@
     width: 100%;
     min-height: 100vh;
     background-color: @color-bg;
-    .dress-wrapper, .discount-wrapper, {
+    .dress-wrapper, .discount-wrapper{
       padding-top: 5px;
       padding-bottom: 50px;
     }

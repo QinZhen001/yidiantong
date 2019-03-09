@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div v-if="showResult">
     <div class="header-wrapper">
       <img-header title="查询结果"></img-header>
     </div>
-    <div class="result-wrapper" v-if="showResult">
+    <div class="result-wrapper">
       <div class="result-water">
         余 水:
         <div class="result-text">
