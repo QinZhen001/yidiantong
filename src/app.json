@@ -13,7 +13,8 @@
     "pages/car/main",
     "pages/me-shoppingcar/main",
     "pages/me-coupon/main",
-    "pages/me-order/main"
+    "pages/me-order/main",
+    "pages/me-express/main"
   ],
   "window": {
     "navigationBarTitleText": "邑点通",

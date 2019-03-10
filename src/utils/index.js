@@ -60,7 +60,7 @@ export function getUserInfo() {
  * @param nickName
  * @param avatarUrl
  */
-function setUserInfo({nickName, avatarUrl}) {
+export function setUserInfo({nickName, avatarUrl}) {
   store.commit(types.SET_USER_INFO, {
     nickName: nickName,
     avatarUrl: avatarUrl

@@ -43,6 +43,9 @@
     background-color: @color-bg-red;
     border-radius: 20px;
     text-align: center;
+    &.common-button + .common-button {
+      margin-left: 10px;
+    }
     &.show-shadow {
       .common-shadow();
     }

@@ -30,8 +30,8 @@
     font-size: 0;
     image {
       display: inline-block;
-      width: 100px;
-      height: 100px;
+      width: 90px;
+      height: 90px;
     }
     .text {
       font-size: 14px;

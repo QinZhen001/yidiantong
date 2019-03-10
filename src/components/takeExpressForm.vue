@@ -9,7 +9,7 @@
                 @changText="setTakeFormItem('name',$event)">
     </input-item>
     <input-item beforeText="宿 舍"
-                placeholder="请输入宿舍号 格式如88-206"
+                placeholder="请输入宿舍号 格式如47-206"
                 type="text"
                 ref="takeDormInput"
                 :validate="dormNumValidate"
@@ -101,10 +101,6 @@
         }
         if (!this.takeForm.studentNum) {
           showToast("请您填写正确的学号!")
-          return false
-        }
-        if (!this.deliveryForm.info) {
-          showToast("请您填写正确的信息!")
           return false
         }
         return true

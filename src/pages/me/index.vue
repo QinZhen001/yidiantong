@@ -2,12 +2,16 @@
   <div class="me">
     <div class="me-header">
       <div class="header-bend-bg"></div>
-      <div class="header-content">
+      <button class="header-content"
+              hover-class="none"
+              open-type="getUserInfo"
+              @getuserinfo="getUserInfo">
         <div class="avatar-wrapper">
           <img :src="userInfo.avatarUrl" alt="">
         </div>
-        <div class="username">{{userInfo.nickName}}</div>
-      </div>
+        <div class="username" v-if="userInfo.nickName">{{userInfo.nickName}}</div>
+        <div class="username" v-else>点我登录</div>
+      </button>
     </div>
     <divider height="15px"></divider>
     <div class="me-list">
@@ -29,9 +33,10 @@
 <script type="text/ecmascript-6">
   import Divider from '../../components/divider.vue'
   import {request} from '../../api/request'
-  import {showDialog, getUserInfo} from '../../utils/index'
+  import {setUserInfo, showToast} from '../../utils/index'
   import {appName} from '../../common/constant/constant'
   import {userInfoMixin} from '../../common/mixin/mixin'
+
 
   export default{
     mixins: [userInfoMixin],
@@ -54,7 +59,8 @@
           },
           {
             name: '我的快递',
-            iconUrl: '/static/img/me/express.png'
+            iconUrl: '/static/img/me/express.png',
+            url: '/pages/me-express/main'
           },
           {
             name: '我的优惠卷',
@@ -65,20 +71,22 @@
       }
     },
     methods: {
-      test(){
-        console.log('test')
-        wx.getUserInfo({
-          success(res) {
-            console.log(res.userInfo)
-          }
-        })
-      },
       jump(item){
+        if (!this.userInfo.nickName) {
+          showToast('请您先登录!')
+          return
+        }
         if (item.url) {
           wx.navigateTo({
             url: item.url
           })
         }
+      },
+      getUserInfo(res){
+        setUserInfo({
+          avatarUrl: res.mp.detail.userInfo.avatarUrl,
+          nickName: res.mp.detail.userInfo.nickName,
+        })
       }
     },
     components: {
@@ -89,6 +97,7 @@
 
 <style lang="less" scoped rel="stylesheet/less">
   @import '../../common/less/variable';
+  @import '../../common/less/mixin1';
 
   .me {
     width: 100%;
@@ -106,9 +115,10 @@
         border-bottom-left-radius: 1000px 100px;
       }
       .header-content {
+        .cancel-default-btn();
         position: absolute;
         left: 50%;
-        height: 50%;
+        top: 50%;
         transform: translate(-50%, -50%);
         font-size: 0;
         .avatar-wrapper {
@@ -125,10 +135,14 @@
           }
         }
         .username {
+          width: 100%;
+          height: 30px;
+          line-height: 30px;
           text-align: center;
           color: @color-middle-black;
           font-size: @font-size-medium-x;
           letter-spacing: 1px;
+          .no-wrap();
         }
       }
     }

@@ -54,7 +54,9 @@
       <div class="header-wrapper">
         <img-header title="取件人信息"></img-header>
       </div>
-      <take-express-form></take-express-form>
+      <take-express-form
+        ref="takeExpressForm">
+      </take-express-form>
       <div class="button-wrapper">
         <common-button
           padding="30"
@@ -89,7 +91,7 @@
           </div>
           <div class="item-right">
             <span class="text">当天到店自取支付<span class="red-text">1元</span></span>
-            <span class="text">保管费<span class="red-text">3元/天</span> </span>
+            <span class="text">保管费<span class="red-text">1元/天</span> </span>
           </div>
         </div>
         <textarea-item firstText="留 言:"></textarea-item>
@@ -97,12 +99,17 @@
           <agreement text="我同意邑点通"
                      protocol="<代拿服务费用条款>"
                      url="/pages/protocol/main"
-                     @checkedChange="checkedChange">
+                     :isAgree="hasAgreeTakeProtocol"
+                     @checkedChange="checkedChange('hasAgreeTakeProtocol',$event)">
           </agreement>
         </div>
       </div>
       <div class="button-wrapper">
-        <common-button text="确定下单" @clickBtn="comfirmTakeBySelf"></common-button>
+        <common-button
+          padding="30"
+          text="确定下单"
+          @clickBtn="confirmTakeBySelf">
+        </common-button>
       </div>
     </div>
     <div class="express-take-to-dorm" v-if="showIndex===4">
@@ -115,8 +122,8 @@
             <text class="text" space='emsp'>费 用:</text>
           </div>
           <div class="item-right">
-            <span class="text">北区宿舍及附近：3-5元</span>
-            <span class="text">西区/玫瑰园宿舍及附近：3-4元</span>
+            <span class="text">北区宿舍及附近：2-3元</span>
+            <span class="text">西区/玫瑰园宿舍及附近：1-2元</span>
           </div>
         </div>
         <div class="form-item">
@@ -133,12 +140,17 @@
           <agreement text="我同意邑点通"
                      protocol="<代拿服务费用条款>"
                      url="/pages/protocol/main"
-                     @checkedChange="checkedChange">
+                     :isAgree="hasAgreeTakeProtocol"
+                     @checkedChange="checkedChange('hasAgreeTakeProtocol',$event)">
           </agreement>
         </div>
       </div>
       <div class="button-wrapper">
-        <common-button text="确定下单"></common-button>
+        <common-button
+          @clickBtn="confirmTakeToDorm"
+          padding="30"
+          text="确定下单">
+        </common-button>
       </div>
     </div>
   </div>
@@ -155,6 +167,7 @@
   import TakeExpressForm from '../../components/takeExpressForm.vue'
   import {showToast, showDialog,} from '../../utils/index'
   import {phoneNum} from '../../common/constant/constant'
+  import {userInfoMixin} from '../../common/mixin/mixin'
 
   const DELIVERY_SHOW = 0, //寄快递展示
     EXPRESS_TAKE = 1, //取快递基本信息填写
@@ -166,7 +179,15 @@
 
   const db = wx.cloud.database()
 
+  let takeForm = {}
+
   export default{
+    mixins: [userInfoMixin],
+    onUnload(){
+      this.hasAgreeServiceProtocol = false
+      this.hasAgreeDoorProtocol = false
+      this.hasAgreeTakeProtocol = false
+    },
     data(){
       return {
         expresses: [
@@ -176,6 +197,7 @@
         curExpressName: EXPRESS_ZTO,
         hasAgreeServiceProtocol: false,
         hasAgreeDoorProtocol: false,
+        hasAgreeTakeProtocol: false,
         showIndex: DELIVERY_SHOW,
       }
     },
@@ -191,12 +213,6 @@
       checkedChange(key, newBool){
         this[key] = newBool
       },
-      comfirmTakeBySelf(){
-        showDialog('',
-          "快件到店后，我们会以短信方式通知您，请当天到店收取（玫瑰园BW正装店），否则产生额外保管费！",
-          false,
-          "我知道了")
-      },
       confirmDeliveryForm(){
         if (!this.hasAgreeDoorProtocol) {
           showToast("请您先同意上门服务费用条款!")
@@ -208,26 +224,64 @@
       },
       submitDeliveryForm(){
         let formData = this.$refs.sendExpressForm.getData()
+        //action行为 send代表寄快递 take代表取快递 (取快递时 增加字段takeAction取值 '到店自取' '送达宿舍')
         db.collection('express').add({
           data: {
-            ...formData
+            ...formData,
+            expressName: this.curExpressName,
+            action: 'send',
+            nickName: this.userInfo.nickName //nickName作为查找的唯一标识
           }
         }).then(res => {
           showToast("下单成功!", 'success')
           this.$refs.sendExpressForm.clear()
         })
-//        console.log('formData', formData)
       },
       changeNav(index){
         this.showIndex = index
       },
       navToBySelf(){
-        this.showIndex = EXPRESS_TAKE_BY_SELF
-        console.log(this.deliveryForm, this.takeForm)
+        if (this.$refs.takeExpressForm.check()) {
+          takeForm = this.$refs.takeExpressForm.getData()
+          this.showIndex = EXPRESS_TAKE_BY_SELF
+        }
       },
       navToDorm(){
-        this.showIndex = EXPRESS_TAKE_TO_DORM
-        console.log(this.deliveryForm, this.takeForm)
+        if (this.$refs.takeExpressForm.check()) {
+          takeForm = this.$refs.takeExpressForm.getData()
+          this.showIndex = EXPRESS_TAKE_TO_DORM
+        }
+      },
+      confirmTakeBySelf(){
+        if (!this.hasAgreeTakeProtocol) {
+          showToast('请您先同意代拿服务费用条款!')
+          return
+        }
+        showDialog('',
+          "快件到店后，我们会以短信方式通知您，请当天到店收取（玫瑰园BW正装店），否则产生额外保管费！",
+          false,
+          "我知道了")
+        this.submitTakeExpressForm('到店自取')
+      },
+      confirmTakeToDorm(){
+        if (!this.hasAgreeTakeProtocol) {
+          showToast('请您先同意代拿服务费用条款!')
+          return
+        }
+        this.submitTakeExpressForm('送达宿舍')
+      },
+      submitTakeExpressForm(takeAction){
+        db.collection('express').add({
+          data: {
+            ...takeForm,
+            action: 'take', //取快递
+            takeAction: takeAction,
+            nickName: this.userInfo.nickName //nickName作为查找的唯一标识
+          }
+        }).then(res => {
+          showToast("下单成功!", 'success')
+          takeForm = {}
+        })
       },
       phoneCall(){
         wx.makePhoneCall({
@@ -352,10 +406,11 @@
         }
       }
       .button-wrapper {
-        margin-top: 35px;
+        margin-top: 10px;
+        width: 100%;
+        text-align: center;
       }
     }
-
     .header-wrapper {
       position: relative;
       height: 56px;

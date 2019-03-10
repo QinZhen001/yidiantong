@@ -25,11 +25,15 @@
     <div class="nav">
       <div class="nav-item"
            v-for="(item,index) in navItems"
-           :key="index">
-        <div class="nav-item-content" @click.stop="clickNavItem(item.pageUrl)">
+           :key="index"
+           @click.stop="clickNavItem(item.pageUrl)">
+        <button class="nav-item-content"
+                hover-class="none"
+                open-type="getUserInfo"
+                @getuserinfo="getUserInfo">
           <img :src="item.imgUrl">
           <text class="text">{{item.text}}</text>
-        </div>
+        </button>
       </div>
     </div>
   </div>
@@ -39,8 +43,9 @@
   import Divider from '../../components/divider.vue'
   import {request} from '../../api/request'
   import {navItems, shareInfo, phoneNum, shopPosition} from '../../common/constant/constant'
-  import {showToast} from '../../utils/index'
+  import {showToast, setUserInfo} from '../../utils/index'
   import {userInfoMixin} from '../../common/mixin/mixin'
+
 
   export default {
     mixins: [userInfoMixin],
@@ -65,11 +70,14 @@
 //        console.log(this.imgUrls)
       },
       clickNavItem(url){
+        if (!this.userInfo.nickName) {
+          showToast("请允许获取用户信息!")
+          return
+        }
         if (!url) {
           showToast("敬请期待", null, "/static/img/icon_warn.png")
           return
         }
-        console.log(url)
         wx.navigateTo({
           url: url
         })
@@ -80,6 +88,13 @@
           longitude: shopPosition[1],
           name: "邑大B&W正装店",
           address: '五邑大学玫瑰园置禾超市隔壁'
+        })
+      },
+      getUserInfo(res){
+//        console.log(res)
+        setUserInfo({
+          avatarUrl: res.mp.detail.userInfo.avatarUrl,
+          nickName: res.mp.detail.userInfo.nickName,
         })
       }
     },
@@ -140,22 +155,24 @@
         height: 100px;
         width: 33.33333333%;
         .nav-item-content {
-          position: absolute;
-          left: 50%;
-          top: 50%;
-          transform: translate(-50%, -50%);
-          text-align: center;
+          .cancel-default-btn();
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+          width: 100%;
+          height: 100%;
           font-size: 0;
-          .extend-click();
           img {
+            flex: 0 0 auto;
             width: 48px;
             height: 48px;
           }
           .text {
-            margin-top: 8px;
-            text-align: center;
-            display: block;
-            font-size: 14px;
+            height: 32px;
+            line-height: 32px;
+            flex: 0 0 auto;
+            font-size: @font-size-medium;
             letter-spacing: ~"1rpx";
             color: @color-middle-black;
           }

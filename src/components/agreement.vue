@@ -52,6 +52,7 @@
     display: inline-block;
     font-size: 0;
     .text {
+      margin-left: 2px;
       display: inline-block;
       vertical-align: middle;
       font-size: 14px;
