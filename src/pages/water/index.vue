@@ -132,6 +132,9 @@
 
   export default{
     mixins: [userInfoMixin],
+    onUnload(){
+      this.showQueryResult = false
+    },
     data(){
       return {
         orderForm: {
@@ -155,7 +158,7 @@
     },
     methods: {
       changeNav(index){
-          this.curNavIndex = index
+        this.curNavIndex = index
       },
       chooseWater(item){
         choseWater = item

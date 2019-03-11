@@ -81,8 +81,8 @@ module.exports = merge(baseWebpackConfig, {
     // }),
     new FriendlyErrorsPlugin(),
     // 复制插件
-    new CopyWebpackPlugin([
-      {from: 'cloudfunctions', to: 'cloudfunctions'}
-    ])
+    // new CopyWebpackPlugin([
+    //   {from: 'cloudfunctions', to: 'cloudfunctions'}
+    // ])
   ]
 })

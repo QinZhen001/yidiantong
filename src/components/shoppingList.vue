@@ -75,7 +75,7 @@
           font-size: 14px;
         }
         .item-title {
-          flex: 0 0 110px;
+          flex: 0 0 120px;
           line-height: 24px;
           overflow: hidden;
           text-overflow: ellipsis;

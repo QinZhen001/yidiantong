@@ -1,23 +1,20 @@
 <template>
   <div class="page">
-    <div v-if="shopList" class="shop-list-wrapper">
-      <div class="card-item" v-for="(item,index) in shopList" :key="index">
+    <div v-if="expressList.length" class="shop-list-wrapper">
+      <div class="card-item" v-for="(item,index) in expressList" :key="index">
         <div class="header">
-          <div class="header-left">{{item.time}}</div>
-          <div class="header-right">已下单</div>
+          <div class="header-left">{{item.name}}</div>
+          <div class="header-right">{{item.action}}</div>
+          <div class="header-right" v-if="item.expressName">{{item.expressName}}</div>
+          <div class="header-right" v-if="item.takeAction">{{item.takeAction}}</div>
         </div>
         <div class="center" v-if="item.name">
-          <div class="center-name">{{item.name}}</div>
-          <div class="center-dorm">宿舍号:{{item.dorm}}</div>
-          <div class="center-phone">手机:{{item.phoneNum}}</div>
+          <div class="center-dorm">宿舍号: {{item.dorm}}</div>
+          <div class="center-phone">手机: {{item.phone}}</div>
         </div>
-        <div
-          class="shop-list-item"
-          v-for="(product,i) in item.shopList"
-          :key="i">
-          <div class="title">{{product.title}}</div>
-          <div class="price">价格: {{product.price}}</div>
-          <div class="num">数量: {{product.num}}</div>
+        <div class="footer" v-if="item.date">
+          <div class="footer-data">时间: {{item.date}} {{item.time}}</div>
+          <div class="footer-weight">估重量: {{item.weight}} kg</div>
         </div>
       </div>
     </div>
@@ -44,7 +41,9 @@
         nickName: this.userInfo.nickName
       }).get().then(res => {
         console.log('res.data', res.data)
-        this.expressList = res.data
+        this.expressList = res.data.map(item => ({
+          ...item, action: item.action === 'send' ? '寄快递' : '取快递'
+        }))
       })
     },
     data(){
@@ -84,53 +83,54 @@
           width: 100%;
           .header-left {
             float: left;
-            color: @color-light-black;
-            font-size: @font-size-small;
+            color: @color-deep-black;
+            font-size: @font-size-medium;
           }
           .header-right {
+            margin-left: 8px;
             float: right;
             color: @color-font-red;
             font-size: @font-size-medium;
-            padding: 0 2px;
+            padding: 0 4px;
             border: 1px solid @color-font-red;
           }
+          .header-right + .header-right {
+            margin-left: 0;
+          }
         }
-        .center, .shop-list-item {
+
+        .center {
           display: flex;
           align-items: center;
           width: 100%;
           height: 30px;
-          font-size: @font-size-medium;
           color: @color-middle-black;
-        }
-        .center {
-          .center-name {
+          .center-dorm, .center-phone {
             .no-wrap();
-            flex: 0 0 120px;
-            width: 120px;
-            font-weight: 700;
+            font-size: @font-size-small;
           }
           .center-dorm {
-            font-size: @font-size-small;
             flex: 1 1 auto;
           }
           .center-phone {
-            font-size: @font-size-small;
-            flex: 0 0 auto;
+            flex: 0 0 120px;
           }
         }
-        .shop-list-item {
-          .title {
-            flex: 0 0 120px;
-            width: 120px;
+        .footer {
+          display: flex;
+          align-items: center;
+          width: 100%;
+          height: 30px;
+          color: @color-middle-black;
+          .footer-data, .footer-weight {
             .no-wrap();
+            font-size: @font-size-small;
           }
-          .price {
+          .footer-data {
             flex: 1 1 auto;
-            color: @color-font-red;
           }
-          .num {
-            flex: 0 0 auto;
+          .footer-weight {
+            flex: 0 0 120px;
           }
         }
       }

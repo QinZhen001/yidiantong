@@ -51,24 +51,30 @@
     mixins: [userInfoMixin],
     data(){
       return {
-        imgUrls: [],
+        imgUrls: [
+          "cloud://dev-00195f.6465-dev-00195f/slider/slider_1.jpg",
+          "cloud://dev-00195f.6465-dev-00195f/slider/slider_2.jpg",
+          "cloud://dev-00195f.6465-dev-00195f/slider/slider_3.jpg",
+          "cloud://dev-00195f.6465-dev-00195f/slider/slider_4.jpg",
+          "cloud://dev-00195f.6465-dev-00195f/slider/slider_5.jpg"
+        ],
         navItems: navItems,
         phoneNum: phoneNum
       }
     },
     created(){
-      this.getImgUrls()
+//      this.getImgUrls()
     },
     mounted(){
 
     },
     methods: {
-      async getImgUrls(){
-        const res = await request('/swiper')
-//        console.log(res)
-        this.imgUrls = res.data.imgList
-//        console.log(this.imgUrls)
-      },
+//      getImgUrls(){
+////        const res = await request('/swiper')
+////        console.log(res)
+////        this.imgUrls = ["/static/img/slider1.jpg", "/static/img/slider2.jpg", "/static/img/slider3.jpg"]
+////        console.log(this.imgUrls)
+//      },
       clickNavItem(url){
         if (!this.userInfo.nickName) {
           showToast("请允许获取用户信息!")
@@ -92,10 +98,12 @@
       },
       getUserInfo(res){
 //        console.log(res)
-        setUserInfo({
-          avatarUrl: res.mp.detail.userInfo.avatarUrl,
-          nickName: res.mp.detail.userInfo.nickName,
-        })
+        if (!this.userInfo.nickName && res.mp.detail.userInfo && res.mp.detail.userInfo.avatarUrl) {
+          setUserInfo({
+            avatarUrl: res.mp.detail.userInfo.avatarUrl,
+            nickName: res.mp.detail.userInfo.nickName,
+          })
+        }
       }
     },
     components: {

@@ -14,7 +14,6 @@
     <scroll-view
       class="info-body"
       scroll-y="true"
-      @scroll="scroll"
       @scrolltolower="scrollToLower">
       <div class="body-item"
            @click.stop="goToDetailInfo(index)"
@@ -168,9 +167,6 @@
       scrollToLower(){
         console.log('scrollToLower', '上拉')
         this.curType === '全部' ? this.getAllInfo(false) : this.getInfo(false)
-      },
-      scroll(){
-        console.log('scroll')
       },
       ...mapMutations({
         setInfo: 'SET_INFO'

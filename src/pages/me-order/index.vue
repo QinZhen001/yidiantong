@@ -1,6 +1,6 @@
 <template>
   <div class="order-page">
-    <div v-if="shopList" class="shop-list-wrapper">
+    <div v-if="shopList.length" class="shop-list-wrapper">
       <div class="card-item" v-for="(item,index) in shopList" :key="index">
         <div class="header">
           <div class="header-left">{{item.time}}</div>
@@ -95,8 +95,9 @@
             float: right;
             color: @color-font-red;
             font-size: @font-size-medium;
-            padding: 0 2px;
+            padding: 0 4px;
             border: 1px solid @color-font-red;
+            box-sizing: border-box;
           }
         }
         .center, .shop-list-item {
