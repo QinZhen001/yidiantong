@@ -4,7 +4,7 @@
       <shopping-list :list="shopList" @clearShoppingCar="clearShoppingCar"></shopping-list>
     </div>
     <div v-else>
-      <center-text name="购物车"></center-text>
+      <center-text name="shopping车"></center-text>
     </div>
   </div>
 </template>

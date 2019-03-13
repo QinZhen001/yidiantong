@@ -13,7 +13,7 @@
           <div class="price" :class="{'active-price': isActive }">￥{{totalPrice}}</div>
         </div>
         <div class="content-right" :class="{'active-right': isActive }" @click.stop="settle">
-          <div class="text">结算 ({{totalNum}})</div>
+          <div class="text">选择 ({{totalNum}})</div>
         </div>
       </div>
       <div class="shopping-list-wrapper" v-if="showShopListFlag">

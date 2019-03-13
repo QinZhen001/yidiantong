@@ -76,8 +76,8 @@
       },
       settleGoods(){
         wx.showModal({
-          title: '结算',
-          content: '确定要结算这些商品吗?',
+          title: '选择',
+          content: '确定要选择这些商品吗?',
           success: (res) => {
             if (res.confirm) {
               this.commitOrder()
@@ -93,7 +93,7 @@
             nickName: this.userInfo.nickName
           }
         }).then(res => {
-          showToast('结算成功', 'success')
+          showToast('成功', 'success')
           this.setShopList([])
         })
       },

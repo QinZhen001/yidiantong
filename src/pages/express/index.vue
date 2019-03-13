@@ -46,7 +46,7 @@
       <div class="button-wrapper">
         <common-button
           padding="30"
-          text="确认下单"
+          text="确认"
           @clickBtn="confirmDeliveryForm"></common-button>
       </div>
     </div>
@@ -107,7 +107,7 @@
       <div class="button-wrapper">
         <common-button
           padding="30"
-          text="确定下单"
+          text="确定"
           @clickBtn="confirmTakeBySelf">
         </common-button>
       </div>
@@ -149,7 +149,7 @@
         <common-button
           @clickBtn="confirmTakeToDorm"
           padding="30"
-          text="确定下单">
+          text="确定">
         </common-button>
       </div>
     </div>
@@ -233,7 +233,7 @@
             nickName: this.userInfo.nickName //nickName作为查找的唯一标识
           }
         }).then(res => {
-          showToast("下单成功!", 'success')
+          showToast("成功!", 'success')
           this.$refs.sendExpressForm.clear()
         })
       },
@@ -279,7 +279,7 @@
             nickName: this.userInfo.nickName //nickName作为查找的唯一标识
           }
         }).then(res => {
-          showToast("下单成功!", 'success')
+          showToast("成功!", 'success')
           takeForm = {}
         })
       },

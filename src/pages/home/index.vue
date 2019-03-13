@@ -22,7 +22,7 @@
       </div>
     </div>
     <divider></divider>
-    <div class="nav">
+    <div class="nav" v-if="showFlag">
       <div class="nav-item"
            v-for="(item,index) in navItems"
            :key="index"
@@ -59,22 +59,21 @@
           "cloud://dev-00195f.6465-dev-00195f/slider/slider_5.jpg"
         ],
         navItems: navItems,
-        phoneNum: phoneNum
+        phoneNum: phoneNum,
+        showFlag: 0
       }
     },
     created(){
-//      this.getImgUrls()
+      const db = wx.cloud.database()
+      db.collection('init').get().then(res => {
+//        console.log('res', res.data[0].showFlag)
+        this.showFlag = res.data[0].showFlag || 0
+      })
     },
     mounted(){
 
     },
     methods: {
-//      getImgUrls(){
-////        const res = await request('/swiper')
-////        console.log(res)
-////        this.imgUrls = ["/static/img/slider1.jpg", "/static/img/slider2.jpg", "/static/img/slider3.jpg"]
-////        console.log(this.imgUrls)
-//      },
       clickNavItem(url){
         if (!this.userInfo.nickName) {
           showToast("请允许获取用户信息!")

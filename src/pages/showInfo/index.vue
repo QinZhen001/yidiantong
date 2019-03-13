@@ -112,6 +112,7 @@
       getAllInfo(isFirstPage){
 //        isFirstPage 是否是第一页
         db.collection('info')
+          .orderBy('time', 'desc')
           .skip(10 * (this.curPage - 1))
           .limit(10)
           .get()
@@ -127,6 +128,7 @@
       getInfo(isFirstPage){
         // isFirstPage 是否是第一页
         db.collection('info')
+          .orderBy('time', 'desc')
           .where({type: this.curType})
           .skip(10 * (this.curPage - 1))
           .limit(10)

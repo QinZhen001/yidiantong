@@ -6,7 +6,7 @@ const state = {
     nickName: '' //昵称
   },
   info: {}, //发布的信息
-  shopList: [] //购物车列表
+  shopList: []
 }
 
 

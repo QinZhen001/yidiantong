@@ -1,7 +1,7 @@
 <template>
   <div class="shopping-list">
     <div class="list-header">
-      <div class="header-left">购物车</div>
+      <div class="header-left">shopping车</div>
       <div class="header-right" @click.stop="clearShoppingCar">清空</div>
     </div>
     <scroll-view class="list-content" scroll-y="true">

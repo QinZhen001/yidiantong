@@ -187,7 +187,7 @@
             phoneNum: this.orderForm.phoneNum
           }
         }).then(res => {
-          showToast('下单成功', 'success')
+          showToast('成功', 'success')
           this.clearData()
         })
       },

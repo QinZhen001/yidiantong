@@ -14,7 +14,7 @@
       </button>
     </div>
     <divider height="15px"></divider>
-    <div class="me-list">
+    <div class="me-list" v-if="showFlag">
       <div v-for="(item,index) in userList"
            :key="index"
            class="item"
@@ -34,17 +34,25 @@
   import Divider from '../../components/divider.vue'
   import {request} from '../../api/request'
   import {setUserInfo, showToast} from '../../utils/index'
-  import {appName} from '../../common/constant/constant'
+  import {appName, shareInfo} from '../../common/constant/constant'
   import {userInfoMixin} from '../../common/mixin/mixin'
 
 
   export default{
     mixins: [userInfoMixin],
+    created(){
+      const db = wx.cloud.database()
+      db.collection('init').get().then(res => {
+//        console.log('res', res.data[0].showFlag)
+        this.showFlag = res.data[0].showFlag || 0
+      })
+    },
     data(){
       return {
+        showFlag: 0,
         userList: [
           {
-            name: '我的购物车',
+            name: '我的物品',
             iconUrl: '/static/img/me/shopping_car.png',
             url: '/pages/me-shoppingcar/main'
           },
@@ -69,6 +77,9 @@
           },
         ]
       }
+    },
+    onShareAppMessage (res) {
+      return shareInfo
     },
     methods: {
       jump(item){
