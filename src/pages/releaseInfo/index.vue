@@ -7,7 +7,7 @@
       </div>
       <div class="header-right">
         <common-button
-          text="发布"
+          text="发送"
           :showShadow="false"
           @clickBtn="releaseInfo">
         </common-button>
@@ -87,14 +87,16 @@
   import TextareaItem from '../../components/textareaItem.vue'
   import {userInfoMixin} from '../../common/mixin/mixin'
 
+
+  const db = wx.cloud.database()
+
   export default{
     mixins: [userInfoMixin],
-//    onShow(){
-//      this.clearData()
-//    },
-//    onHide(){
-//      this.clearData()
-//    },
+    created(){
+      db.collection('init').get().then(res => {
+        this.showFlag = res.data[0].showFlag || 0
+      })
+    },
     onUnload(){
       console.log('onUnload')
       this.clearData()
@@ -111,14 +113,14 @@
         },
         showImgUrls: [],//展示图片的地址
         typeArray: ['家教', '实习', '兼职', '交易', '其他'],
-        isUploading: false
+        isUploading: false,
+        showFlag: 0
       }
     },
     methods: {
       releaseInfo(){
         if (this.checkInfo()) {
           console.log('this.releaseForm', this.releaseForm)
-          const db = wx.cloud.database()
           db.collection('info').add({
             data: {
               nickName: this.userInfo.nickName,
@@ -137,7 +139,7 @@
         }
       },
       successRelease(){
-        showToast('信息成功发布!', 'success')
+        showToast('成功!', 'success')
         wx.nextTick(() => {
           wx.navigateBack()
         })
@@ -153,7 +155,7 @@
         } else if (!this.releaseForm.type) {
           str = '请选择正确的类型!'
         } else if (this.isUploading) {
-          str = '图片正在上传，请稍候发布!'
+          str = '图片正在上传，请稍候!'
         }
         if (str) {
           showToast(str)

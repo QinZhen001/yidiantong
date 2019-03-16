@@ -81,7 +81,7 @@
           </div>
           <div class="item-right">
             <span class="text">快递到店后，我们会以短信方式通知您，</span>
-            <span class="text">请当天到店自取<span class="red-text">(玫瑰园BW正装店)</span>，</span>
+            <span class="text">请当天到店自取<span class="red-text">(玫瑰园XXX店)</span>，</span>
             <span class="text">否则会产生保管费用。</span>
           </div>
         </div>

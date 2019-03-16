@@ -91,7 +91,7 @@
         wx.openLocation({
           latitude: shopPosition[0],
           longitude: shopPosition[1],
-          name: "邑大B&W正装店",
+          name: "邑大XXX店",
           address: '五邑大学玫瑰园置禾超市隔壁'
         })
       },

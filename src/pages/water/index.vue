@@ -1,7 +1,7 @@
 <template>
   <div class="water">
     <common-header
-      upText="SQ水店 (B&W正装代理点)"
+      upText="XXX店"
       downText="营业时间: 8:30 ─ 12:00 14:40 ─ 23:00"
       :navItems="['掌上订水','余水查询']"
       @changeNav="changeNav">

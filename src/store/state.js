@@ -5,7 +5,7 @@ const state = {
     avatarUrl: '/static/img/avatar.png',  //头像地址
     nickName: '' //昵称
   },
-  info: {}, //发布的信息
+  info: {},
   shopList: []
 }
 

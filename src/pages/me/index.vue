@@ -61,10 +61,6 @@
             iconUrl: '/static/img/me/order.png',
             url: '/pages/me-order/main'
           },
-//          {
-//            name: '我的发布',
-//            iconUrl: '/static/img/me/release.png'
-//          },
           {
             name: '我的快递',
             iconUrl: '/static/img/me/express.png',
