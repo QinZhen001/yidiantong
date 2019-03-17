@@ -1,7 +1,7 @@
 <template>
   <div class="express-page">
     <common-header
-      upText="西门快递 (B&W正装代理点)"
+      upText="xx快递 (xxx代理点)"
       downText="营业时间: 8:30 ─ 22:00"
       :navItems="['寄快递','取快递']"
       @changeNav="changeNav">

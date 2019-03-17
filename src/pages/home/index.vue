@@ -13,12 +13,12 @@
       </div>
     </swiper>
     <divider></divider>
-    <div class="map" @click.stop="navToShop">
+    <div class="map"  v-if="showFlag" @click.stop="navToShop">
       <img src="/static/img/map.png" alt="">
       <div class="text-content">
         <div class="text-item">营业时间: 8:30-22:00</div>
         <div class="text-item">联系方式: {{phoneNum}}</div>
-        <div class="text-item">地址: (B&W正装)玫瑰园置禾超市隔壁</div>
+        <div class="text-item">地址: (xxx店) xxxxxxxxxx</div>
       </div>
     </div>
     <divider></divider>

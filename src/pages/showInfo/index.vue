@@ -14,6 +14,7 @@
     <scroll-view
       class="info-body"
       scroll-y="true"
+      enable-back-to-top="true"
       @scrolltolower="scrollToLower">
       <div class="body-item"
            @click.stop="goToDetailInfo(index)"
@@ -45,6 +46,9 @@
         <div v-if="index===infoBodyItems.length-1">
           <divider></divider>
         </div>
+      </div>
+      <div v-if="showListBottom" class="list-bottom">
+        <div class="text">—— 我也是有底线的 ——</div>
       </div>
     </scroll-view>
     <div class="add-wrapper" @click.stop="goToReleaseInfo">
@@ -82,16 +86,17 @@
 //          }
         ],
         curPage: 1, //当前页数
-        curType: '全部'
+        curType: '全部',
+        showListBottom: false,
       }
     },
     onShow(){
 //      console.log('onShow')
       this.curPage = 1
-      this.curType = '全部'
-      this.getAllInfo(true)
+      this.curType === '全部' ? this.getAllInfo(true) : this.getInfo(true)
     },
     onHide(){
+      this.showListBottom = false
       this.curPage = 1
     },
     onUnload(){
@@ -100,12 +105,13 @@
     },
     methods: {
       clickHeaderItem(index){
-        this.infoHeaderItems.forEach((item, i) => {
-          item.active = (index === i )
-        })
         if (this.curType !== this.infoHeaderItems[index].name) {
+          this.infoHeaderItems.forEach((item, i) => {
+            item.active = (index === i )
+          })
           this.curType = this.infoHeaderItems[index].name
           this.curPage = 1
+          this.showListBottom = false
           this.curType === '全部' ? this.getAllInfo(true) : this.getInfo(true)
         }
       },
@@ -143,6 +149,10 @@
       },
       showInfo(data){
         console.log('data', data)
+        if (!data.length) {
+          this.showListBottom = true
+          return
+        }
         this.infoBodyItems = this.infoBodyItems.concat(data.map(item => ({
           avatarUrl: item.avatarUrl,
           nickName: item.nickName,
@@ -175,7 +185,7 @@
       })
     },
     components: {
-      Divider
+      Divider,
     }
   }
 </script>
@@ -233,9 +243,6 @@
       height: 100%;
       box-sizing: border-box;
       .body-item {
-        &:last-child {
-          padding-bottom: 10px;
-        }
         .item-content {
           position: relative;
           width: 100%;
@@ -305,6 +312,18 @@
             color: @color-bg-red;
             border-radius: 4px;
           }
+        }
+      }
+      .list-bottom {
+        height: 40px;
+        width: 100%;
+        text-align: center;
+        .text {
+          display: inline-block;
+          height: 40px;
+          line-height: 40px;
+          font-size: @font-size-medium;
+          color: @color-light-black;
         }
       }
     }

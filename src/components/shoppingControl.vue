@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="shopping">
+    <div class="shopping" @touchmove.stop="true">
       <div class="shopping-control" @click.stop="showList">
         <div class="content-left">
           <div class="logo-wrapper">
@@ -21,6 +21,7 @@
       </div>
     </div>
     <div class="mask"
+         @touchmove.stop="true"
          v-if="showShopListFlag"
          @click.stop="clickMask">
     </div>
@@ -85,6 +86,9 @@
           this.totalNum += item.num
         })
       },
+      showShopListFlag(newVal){
+        this.$emit('change', newVal)
+      }
     },
     components: {
       ShoppingList

@@ -32,7 +32,7 @@ export const navItems = [
 ]
 
 //客服的电话
-export const phoneNum = "18026160168"
+export const phoneNum = "18011111111"
 
 //要显示店铺位置的经纬度
 export const shopPosition = [22.595355, 113.085880]

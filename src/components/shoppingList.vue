@@ -1,5 +1,5 @@
 <template>
-  <div class="shopping-list">
+  <div class="shopping-list" >
     <div class="list-header">
       <div class="header-left">shopping车</div>
       <div class="header-right" @click.stop="clearShoppingCar">清空</div>
@@ -75,7 +75,7 @@
           font-size: 14px;
         }
         .item-title {
-          flex: 0 0 120px;
+          flex: 0 0 140px;
           line-height: 24px;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -85,7 +85,7 @@
         .item-price {
           flex: 1 1 auto;
           box-sizing: border-box;
-          padding-left: 5px;
+          padding-left: 10px;
           line-height: 24px;
           height: 24px;
           font-weight: 700;
